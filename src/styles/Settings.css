@@ -1,0 +1,238 @@
+.settings-page {
+  padding: 2rem;
+  color: var(--text);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.settings-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+}
+
+.settings-section {
+  margin-bottom: 2rem;
+}
+
+.section-title {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.settings-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.settings-card {
+  background: var(--card-bg);
+
+  border: 1px solid var(--border);
+
+  border-radius: 10px;
+
+  padding: 1.5rem;
+
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 1rem;
+  font-weight: 600;
+
+  margin-bottom: 1.25rem;
+}
+
+.settings-row {
+  display: flex;
+
+  gap: 1rem;
+
+  align-items: flex-end;
+}
+
+.setting-item {
+  flex: 1;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 0.5rem;
+}
+
+.setting-item label {
+  font-weight: 600;
+
+  font-size: 0.9rem;
+}
+
+.setting-item select {
+  padding: 0.75rem 0.9rem;
+
+  border-radius: 8px;
+
+  border: 1px solid var(--border);
+
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(255,255,255,0.12),
+      transparent
+    ),
+    var(--card-bg);
+
+  color: var(--text);
+
+  font-size: 0.95rem;
+
+  cursor: pointer;
+
+  outline: none;
+
+  appearance: none;
+  -webkit-appearance: none;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Cpath fill='%23999' d='M5 7l5 5 5-5'/%3E%3C/svg%3E");
+
+  background-repeat: no-repeat;
+
+  background-position: right 10px center;
+
+  background-size: 14px;
+
+  padding-right: 36px;
+}
+
+.setting-item select:hover {
+  border-color: var(--accent);
+}
+
+.setting-item select:focus {
+  border-color: var(--accent);
+
+  box-shadow:
+    0 0 0 2px
+    color-mix(
+      in srgb,
+      var(--accent) 20%,
+      transparent
+    );
+}
+
+.setting-item select option {
+  background: var(--card-bg);
+  color: var(--text);
+}
+
+.primary-button {
+  background: var(--accent);
+
+  color: white;
+
+  border: none;
+
+  border-radius: 8px;
+
+  padding: 0.75rem 1rem;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.primary-button:hover {
+  transform: translateY(-1px);
+}
+
+.theme-selector {
+  display: flex;
+
+  gap: 0.75rem;
+
+  flex-wrap: wrap;
+}
+
+
+
+
+.theme-button {
+  background: var(--card-bg);
+
+  color: var(--text);
+
+  border: 1px solid var(--border);
+
+  border-radius: 8px;
+
+  padding: 0.75rem 1rem;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.theme-button:hover {
+  background: var(--hover);
+
+  transform: translateY(-1px);
+}
+
+@media (max-width: 900px) {
+  .settings-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 700px) {
+  .settings-row {
+    flex-direction: column;
+
+    align-items: stretch;
+  }
+}
+
+
+
+.settings-actions {
+  display: flex;
+
+  justify-content: flex-end;
+
+  gap: 1rem;
+
+  margin-top: 2rem;
+}
+
+.secondary-button {
+  background: transparent;
+
+  color: var(--text);
+
+  border: 1px solid var(--border);
+
+  border-radius: 8px;
+
+  padding: 0.75rem 1.25rem;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.secondary-button:hover {
+  background: var(--hover);
+}

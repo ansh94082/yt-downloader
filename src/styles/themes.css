@@ -1,0 +1,61 @@
+[data-theme="dark"] {
+
+  /* sidebar */
+
+
+  --sidebar-bg: #18181b;
+  --sidebar-text: #f4f4f5;
+  --sidebar-hover: #27272a;
+  --sidebar-active: #3f3f46;
+  --border: #27272a; 
+
+
+
+  /* setting */
+
+  --hover :  #a3a3a3;
+  --card-bg : #eeeeee;
+
+}
+
+[data-theme="frutiger"] {
+
+
+    /* sidebar */
+
+  --sidebar-bg: rgba(225, 250, 193, 0.774);
+  --sidebar-text: #0f172a;
+  --sidebar-hover: rgba(59,130,246,0.1);
+  --sidebar-active: rgba(48, 117, 226, 0.575);
+  --border: rgba(59,130,246,0.15);
+
+  
+  /* setting */
+
+  --hover :  #b7d3fd;
+  --card-bg : #c8ebee;
+
+
+}
+
+[data-theme="y2k"] {
+
+
+    /* sidebar */
+
+
+  --sidebar-bg: #c2c2c2f6;
+  --sidebar-text: #111827;
+  --sidebar-hover: #8b8d8f;
+  --sidebar-active: #7d7f81;
+  --border: #9fb4d6;
+
+
+  
+  /* setting */
+
+  --hover :  #57565636;
+  --card-bg : #bebebe;
+
+
+}
