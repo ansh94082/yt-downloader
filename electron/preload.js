@@ -10,7 +10,11 @@ contextBridge.exposeInMainWorld(
       ipcRenderer.invoke(
         "settings:save",
         settings
-      )
+      ),
+
+    selectFolder: () =>
+      ipcRenderer.invoke("folder:select")
+
   }
 );
 

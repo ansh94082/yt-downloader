@@ -13,7 +13,7 @@ const Settings = () => {
 
   const [originalSettings, setOriginalSettings] = useState({});
 
-  useEffect(() => {
+  useEffect(() => {       // whenever the app loads for the first time it calls the settings by sending an api request ,  electron-store sends back previous config.
     const loadSettings = async () => {
       const data = await window.api.getSettings();
 
@@ -32,7 +32,7 @@ const Settings = () => {
   }, []);
 
   const handleChange = (field, value) => {
-    setSettings(prev => ({
+    setSettings(prev => ({   // invoked when user changes settings, but not saved yet
       ...prev,
       [field]: value
     }));
@@ -51,13 +51,13 @@ const Settings = () => {
   };
 
   const handleSave = async () => {
-    await window.api.saveSettings(settings);
+    await window.api.saveSettings(settings); // user clicks save button
 
     setOriginalSettings(settings);
   };
 
   const handleCancel = () => {
-    setSettings(originalSettings);
+    setSettings(originalSettings); // user cancels the changed settings , so we call back previous settings
 
     if (originalSettings.theme) {
       document.documentElement.setAttribute(
@@ -70,7 +70,7 @@ const Settings = () => {
 
 
   useEffect(() => {
-    console.log("Loaded settings:", settings);
+    console.log("Loaded settings:", settings); // test for ?(settings -> load)
   }, [settings]);
 
 

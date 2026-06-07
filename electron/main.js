@@ -1,7 +1,7 @@
-import { app, BrowserWindow } from 'electron';
-import { ipcMain } from "electron";
+import { app, BrowserWindow , dialog , ipcMain} from 'electron';
 import store from "./settingsStore.js";
 import path from "path";
+
 
 
 const createWindow = () => {
@@ -64,3 +64,20 @@ console.log(
     "preload.js"
   )
 );
+
+ipcMain.handle("folder:select", () => {
+
+  
+
+  const result = dialog.showOpenDialog({properties: ["openDirectory"]});
+
+  
+  if(result.canceled){
+    return null;
+  }
+  return result.filepaths[0];
+    
+
+
+
+});
