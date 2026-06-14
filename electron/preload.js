@@ -13,7 +13,11 @@ contextBridge.exposeInMainWorld(
       ),
 
     selectFolder: () =>
-      ipcRenderer.invoke("folder:select")
+      ipcRenderer.invoke("folder:select"),
+
+    getDefaultDownloadPath: () =>
+      ipcRenderer.invoke("downloads:path")
+
 
   }
 );

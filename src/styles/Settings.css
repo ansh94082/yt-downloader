@@ -1,13 +1,15 @@
 .settings-page {
   padding: 2rem;
-  color: var(--text);
   width: 100%;
   box-sizing: border-box;
+  color: var(--text);
+  font-family: var(--font-main, "Segoe UI", sans-serif);
 }
 
 .settings-title {
   font-size: 2rem;
   font-weight: 700;
+  color: var(--text);
   margin-bottom: 2rem;
 }
 
@@ -16,107 +18,88 @@
 }
 
 .section-title {
+  color: var(--text);
   font-size: 1.1rem;
-  margin-bottom: 1rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.card-title {
+  color: var(--text);
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 1.25rem;
 }
 
 .settings-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-
   gap: 1.5rem;
   margin-bottom: 2rem;
 }
 
 .settings-card {
   background: var(--card-bg);
-
   border: 1px solid var(--border);
-
   border-radius: 10px;
-
   padding: 1.5rem;
-
-  box-shadow: var(--shadow);
-}
-
-.card-title {
-  font-size: 1rem;
-  font-weight: 600;
-
-  margin-bottom: 1.25rem;
+  box-sizing: border-box;
 }
 
 .settings-row {
   display: flex;
-
   gap: 1rem;
-
   align-items: flex-end;
 }
 
 .setting-item {
   flex: 1;
-
   display: flex;
-
   flex-direction: column;
-
-  gap: 0.5rem;
+  gap: .5rem;
 }
 
 .setting-item label {
+  color: var(--text);
+  font-size: .9rem;
   font-weight: 600;
-
-  font-size: 0.9rem;
 }
 
+.folder-path,
 .setting-item select {
-  padding: 0.75rem 0.9rem;
+  height: 42px;
+  width: 100%;
+
+  padding: 0 14px;
 
   border-radius: 8px;
-
   border: 1px solid var(--border);
 
-  background:
-    linear-gradient(
-      to bottom,
-      rgba(255,255,255,0.12),
-      transparent
-    ),
-    var(--card-bg);
-
+  background: var(--input-bg);
   color: var(--text);
 
-  font-size: 0.95rem;
-
-  cursor: pointer;
+  font-size: .95rem;
 
   outline: none;
 
-  appearance: none;
-  -webkit-appearance: none;
-
   transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
+    border-color .15s ease,
+    box-shadow .15s ease,
+    transform .15s ease;
 
-  background-image:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Cpath fill='%23999' d='M5 7l5 5 5-5'/%3E%3C/svg%3E");
-
-  background-repeat: no-repeat;
-
-  background-position: right 10px center;
-
-  background-size: 14px;
-
-  padding-right: 36px;
+  box-sizing: border-box;
 }
 
+.setting-item select {
+  cursor: pointer;
+}
+
+.folder-path:hover,
 .setting-item select:hover {
   border-color: var(--accent);
 }
 
+.folder-path:focus,
 .setting-item select:focus {
   border-color: var(--accent);
 
@@ -124,115 +107,133 @@
     0 0 0 2px
     color-mix(
       in srgb,
-      var(--accent) 20%,
+      var(--accent) 25%,
       transparent
     );
 }
 
 .setting-item select option {
-  background: var(--card-bg);
-  color: var(--text);
+  background: #ffffff;
+  color: #111827;
 }
 
-.primary-button {
-  background: var(--accent);
-
-  color: white;
-
-  border: none;
-
-  border-radius: 8px;
-
-  padding: 0.75rem 1rem;
-
-  cursor: pointer;
-
-  transition:
-    transform 0.2s ease,
-    opacity 0.2s ease;
-}
-
-.primary-button:hover {
-  transform: translateY(-1px);
+.theme-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
 }
 
 .theme-selector {
   display: flex;
-
-  gap: 0.75rem;
-
+  gap: .75rem;
   flex-wrap: wrap;
 }
 
+.theme-button,
+.browse-button,
+.primary-button {
+  min-height: 42px;
 
+  padding: .75rem 1rem;
 
+  cursor: pointer;
 
-.theme-button {
-  background: var(--card-bg);
+  font-size: .95rem;
+  font-weight: 600;
 
-  color: var(--text);
+  transition:
+    transform .15s ease,
+    box-shadow .15s ease;
+
+  box-sizing: border-box;
+}
+
+.theme-button:hover,
+.browse-button:hover,
+.primary-button:hover {
+  transform: translateY(-1px);
+}
+
+.secondary-button {
+  min-height: 42px;
+
+  padding: .75rem 1.25rem;
 
   border: 1px solid var(--border);
-
   border-radius: 8px;
 
-  padding: 0.75rem 1rem;
+  background: transparent;
+  color: var(--text);
 
   cursor: pointer;
 
   transition:
-    background 0.2s ease,
-    transform 0.2s ease;
+    background .15s ease,
+    transform .15s ease;
 }
 
-.theme-button:hover {
+.secondary-button:hover {
   background: var(--hover);
-
   transform: translateY(-1px);
+}
+
+.folder-picker {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.folder-path {
+  flex: 1;
+}
+
+.browse-button {
+  min-width: 110px;
+}
+
+.settings-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.theme-selected {
+  border-color: var(--accent) !important;
+
+  box-shadow:
+    0 0 0 2px
+    color-mix(
+      in srgb,
+      var(--accent) 30%,
+      transparent
+    );
 }
 
 @media (max-width: 900px) {
   .settings-grid {
     grid-template-columns: 1fr;
   }
+
+  .theme-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
 
 @media (max-width: 700px) {
   .settings-row {
     flex-direction: column;
-
     align-items: stretch;
   }
-}
 
+  .folder-picker {
+    flex-direction: column;
+    align-items: stretch;
+  }
 
-
-.settings-actions {
-  display: flex;
-
-  justify-content: flex-end;
-
-  gap: 1rem;
-
-  margin-top: 2rem;
-}
-
-.secondary-button {
-  background: transparent;
-
-  color: var(--text);
-
-  border: 1px solid var(--border);
-
-  border-radius: 8px;
-
-  padding: 0.75rem 1.25rem;
-
-  cursor: pointer;
-
-  transition: all 0.2s ease;
-}
-
-.secondary-button:hover {
-  background: var(--hover);
+  .browse-button {
+    width: 100%;
+  }
 }

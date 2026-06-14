@@ -13,9 +13,13 @@ const Settings = () => {
 
   const [originalSettings, setOriginalSettings] = useState({});
 
-  useEffect(() => {       // whenever the app loads for the first time it calls the settings by sending an api request ,  electron-store sends back previous config.
+
+
+  useEffect(() => {
     const loadSettings = async () => {
-      const data = await window.api.getSettings();
+
+      const data =
+        await window.api.getSettings();
 
       setSettings(data);
       setOriginalSettings(data);
@@ -30,6 +34,31 @@ const Settings = () => {
 
     loadSettings();
   }, []);
+
+
+
+
+  const selectfolder = async () => {
+
+    const foldata =
+      await window.api.selectFolder();
+
+    console.log(foldata);
+
+    if (foldata !== null) {
+      handleChange(
+        "downloadFolder",
+        foldata
+      );
+    }
+  };
+
+
+
+
+
+
+
 
   const handleChange = (field, value) => {
     setSettings(prev => ({   // invoked when user changes settings, but not saved yet
@@ -83,20 +112,36 @@ const Settings = () => {
       </h1>
 
       <section className="settings-section">
+
         <h2 className="section-title">
           Download Folder
         </h2>
 
-        <button className="primary-button">
-          Select Folder
-        </button>
+        <div className="folder-picker">
+
+          <input
+            className="folder-path"
+            readOnly
+            title={settings.downloadFolder}
+            value={settings.downloadFolder}
+          />
+
+          <button
+            className="browse-button"
+            onClick={selectfolder}
+          >
+            Browse
+          </button>
+
+        </div>
+
       </section>
 
       <div className="settings-grid">
 
         <section className="settings-card">
 
-          <h2 className="card-title">
+          <h2 className="card-title" >
             Audio Defaults
           </h2>
 
@@ -202,32 +247,45 @@ const Settings = () => {
 
       <section className="settings-section">
 
-        <h2 className="section-title">
-          Theme
-        </h2>
+        <div className="theme-header">
 
-        <div className="theme-selector">
+          <h2 className="section-title">
+            Theme
+          </h2>
 
-          <button
-            className="theme-button"
-            onClick={() => changeTheme("dark")}
-          >
-            Dark
-          </button>
+          <div className="theme-selector">
 
-          <button
-            className="theme-button"
-            onClick={() => changeTheme("frutiger")}
-          >
-            Frutiger Aero
-          </button>
+            <button
+              className={`theme-button ${settings.theme === "dark"
+                ? "theme-selected"
+                : ""
+                }`}
+              onClick={() => changeTheme("dark")}
+            >
+              Dark
+            </button>
 
-          <button
-            className="theme-button"
-            onClick={() => changeTheme("y2k")}
-          >
-            Y2K
-          </button>
+            <button
+              className={`theme-button ${settings.theme === "frutiger"
+                ? "theme-selected"
+                : ""
+                }`}
+              onClick={() => changeTheme("frutiger")}
+            >
+              Frutiger Aero
+            </button>
+
+            <button
+              className={`theme-button ${settings.theme === "y2k"
+                ? "theme-selected"
+                : ""
+                }`}
+              onClick={() => changeTheme("y2k")}
+            >
+              Y2K
+            </button>
+
+          </div>
 
         </div>
 

@@ -1,61 +1,441 @@
+/* =====================================================
+   DARK
+===================================================== */
+
 [data-theme="dark"] {
 
-  /* sidebar */
-
+  --font-main:
+    "Inter",
+    "Segoe UI",
+    sans-serif;
 
   --sidebar-bg: #18181b;
   --sidebar-text: #f4f4f5;
   --sidebar-hover: #27272a;
   --sidebar-active: #3f3f46;
-  --border: #27272a; 
 
+  --card-bg: #232326;
 
+  --input-bg:
+    linear-gradient(
+      180deg,
+      #2d2d31,
+      #232326
+    );
 
-  /* setting */
+  --border: #3a3a40;
 
-  --hover :  #a3a3a3;
-  --card-bg : #eeeeee;
+  --hover: #323238;
 
+  --accent: #3b82f6;
+
+  --text: #f4f4f5;
 }
+
+[data-theme="dark"] .settings-card {
+
+  background:
+    linear-gradient(
+      180deg,
+      #2a2a2f,
+      #232326
+    );
+
+  border: 1px solid #3a3a40;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.04),
+    0 8px 20px rgba(0,0,0,.35);
+}
+
+[data-theme="dark"] .folder-path,
+[data-theme="dark"] .setting-item select {
+
+  background: var(--input-bg);
+
+  border: 1px solid #444;
+
+  color: white;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.04);
+}
+
+[data-theme="dark"] .theme-button,
+[data-theme="dark"] .browse-button,
+[data-theme="dark"] .primary-button {
+
+  background:
+    linear-gradient(
+      180deg,
+      #43434d,
+      #27272f
+    );
+
+  border: 1px solid #5b5b63;
+
+  color: white;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.08),
+    0 2px 8px rgba(0,0,0,.4);
+}
+
+[data-theme="dark"] .theme-button:hover,
+[data-theme="dark"] .browse-button:hover,
+[data-theme="dark"] .primary-button:hover {
+
+  background:
+    linear-gradient(
+      180deg,
+      #555561,
+      #343440
+    );
+}
+
+/* =====================================================
+   FRUTIGER AERO
+===================================================== */
 
 [data-theme="frutiger"] {
 
+  --font-main:
+    "Segoe UI",
+    "Tahoma",
+    sans-serif;
 
-    /* sidebar */
+  --sidebar-bg:
+    linear-gradient(
+      180deg,
+      rgba(210,255,235,.95),
+      rgba(175,230,255,.95)
+    );
 
-  --sidebar-bg: rgba(225, 250, 193, 0.774);
-  --sidebar-text: #0f172a;
-  --sidebar-hover: rgba(59,130,246,0.1);
-  --sidebar-active: rgba(48, 117, 226, 0.575);
-  --border: rgba(59,130,246,0.15);
+  --sidebar-text: #083344;
 
-  
-  /* setting */
+  --sidebar-hover:
+    rgba(255,255,255,.35);
 
-  --hover :  #b7d3fd;
-  --card-bg : #c8ebee;
+  --sidebar-active:
+    rgba(0,180,255,.22);
 
+  --card-bg:
+    rgba(255,255,255,.4);
 
+  --input-bg:
+    linear-gradient(
+      to bottom,
+      rgba(255,255,255,.95),
+      rgba(220,255,250,.85)
+    );
+
+  --border:
+    rgba(255,255,255,.45);
+
+  --hover:
+    rgba(45,172,142,.35);
+
+  --accent: #2ca9ff;
+
+  --text: #083344;
 }
+
+[data-theme="frutiger"] .settings-card {
+
+  position: relative;
+
+  overflow: hidden;
+
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(255,255,255,.75),
+      rgba(200,245,255,.45)
+    );
+
+  backdrop-filter: blur(18px);
+
+  border:
+    1px solid rgba(255,255,255,.5);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.9),
+    0 8px 18px rgba(0,120,255,.12);
+}
+
+[data-theme="frutiger"] .settings-card::before {
+
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+  right: 0;
+  top: 0;
+
+  height: 40%;
+
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(255,255,255,.4),
+      transparent
+    );
+}
+
+[data-theme="frutiger"] .folder-path,
+[data-theme="frutiger"] .setting-item select {
+
+  background: var(--input-bg);
+
+  border:
+    1px solid rgba(255,255,255,.6);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.95),
+    inset 0 -1px 2px rgba(0,0,0,.12),
+    0 3px 8px rgba(0,120,255,.08);
+}
+
+[data-theme="frutiger"] .theme-button,
+[data-theme="frutiger"] .browse-button,
+[data-theme="frutiger"] .primary-button {
+
+  position: relative;
+
+  overflow: hidden;
+
+  border-radius: 999px;
+
+  border: 1px solid #58d6ff;
+
+  color: white;
+
+  text-shadow:
+    0 1px 2px rgba(0,0,0,.35);
+
+  background:
+    linear-gradient(
+      to bottom,
+      #d8fff7 0%,
+      #85f8dc 15%,
+      #3ed7c0 45%,
+      #2ca9ff 100%
+    );
+
+  box-shadow:
+    inset 0 2px 0 rgba(255,255,255,.9),
+    inset 0 -2px 4px rgba(0,0,0,.15),
+    0 0 12px rgba(0,200,255,.25),
+    0 4px 12px rgba(0,0,0,.18);
+}
+
+[data-theme="frutiger"] .theme-button::before,
+[data-theme="frutiger"] .browse-button::before,
+[data-theme="frutiger"] .primary-button::before {
+
+  content: "";
+
+  position: absolute;
+
+  left: 4px;
+  right: 4px;
+  top: 4px;
+
+  height: 45%;
+
+  border-radius: inherit;
+
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(255,255,255,.85),
+      rgba(255,255,255,.15)
+    );
+}
+
+[data-theme="frutiger"] .theme-button:hover,
+[data-theme="frutiger"] .browse-button:hover,
+[data-theme="frutiger"] .primary-button:hover {
+
+  box-shadow:
+    inset 0 2px 0 rgba(255,255,255,1),
+    inset 0 -2px 4px rgba(0,0,0,.15),
+    0 0 18px rgba(0,200,255,.45),
+    0 6px 16px rgba(0,0,0,.22);
+}
+
+/* =====================================================
+   Y2K CHROME
+===================================================== */
 
 [data-theme="y2k"] {
 
+  --font-main:
+    "Trebuchet MS",
+    "Verdana",
+    sans-serif;
 
-    /* sidebar */
+  --sidebar-bg:
+    linear-gradient(
+      180deg,
+      #efefef,
+      #bdbdbd
+    );
 
-
-  --sidebar-bg: #c2c2c2f6;
   --sidebar-text: #111827;
-  --sidebar-hover: #8b8d8f;
-  --sidebar-active: #7d7f81;
-  --border: #9fb4d6;
 
+  --sidebar-hover: #d8d8d8;
 
-  
-  /* setting */
+  --sidebar-active: #b7cbff;
 
-  --hover :  #57565636;
-  --card-bg : #bebebe;
+  --card-bg:
+    linear-gradient(
+      180deg,
+      #f6f6f6,
+      #cfcfcf
+    );
 
+  --input-bg:
+    linear-gradient(
+      180deg,
+      #ffffff,
+      #dddddd
+    );
 
+  --border: #8a8a8a;
+
+  --hover: #ececec;
+
+  --accent: #4f8dff;
+
+  --text: #111827;
+}
+
+[data-theme="y2k"] .settings-card {
+
+  position: relative;
+
+  overflow: hidden;
+
+  background:
+    linear-gradient(
+      180deg,
+      #fafafa,
+      #cfcfcf
+    );
+
+  border: 1px solid #8a8a8a;
+
+  box-shadow:
+    inset 0 1px white,
+    inset 0 -1px #7a7a7a,
+    0 4px 10px rgba(0,0,0,.15);
+}
+
+[data-theme="y2k"] .settings-card::before {
+
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+  right: 0;
+  top: 0;
+
+  height: 35%;
+
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(255,255,255,.45),
+      transparent
+    );
+}
+
+[data-theme="y2k"] .folder-path,
+[data-theme="y2k"] .setting-item select {
+
+  background: var(--input-bg);
+
+  border: 1px solid #8f8f8f;
+
+  box-shadow:
+    inset 0 1px white,
+    inset 0 -1px #9a9a9a;
+}
+
+[data-theme="y2k"] .theme-button,
+[data-theme="y2k"] .browse-button,
+[data-theme="y2k"] .primary-button {
+
+  position: relative;
+
+  overflow: hidden;
+
+  border-radius: 4px;
+
+  border: 1px solid #7b7b7b;
+
+  color: #111;
+
+  font-weight: 600;
+
+  text-shadow:
+    0 1px 0 rgba(255,255,255,.9);
+
+  background:
+    linear-gradient(
+      180deg,
+      #fefefe 0%,
+      #ececec 45%,
+      #c7c7c7 100%
+    );
+
+  box-shadow:
+    inset 0 1px 0 white,
+    inset 0 -1px #888,
+    0 2px 4px rgba(0,0,0,.18);
+}
+
+[data-theme="y2k"] .theme-button::before,
+[data-theme="y2k"] .browse-button::before,
+[data-theme="y2k"] .primary-button::before {
+
+  display: none;
+}
+
+[data-theme="y2k"] .theme-button:hover,
+[data-theme="y2k"] .browse-button:hover,
+[data-theme="y2k"] .primary-button:hover {
+
+  background:
+    linear-gradient(
+      180deg,
+      #ffffff,
+      #f0f0f0,
+      #d4d4d4
+    );
+
+  box-shadow:
+    inset 0 1px white,
+    inset 0 -1px #777,
+    0 4px 8px rgba(0,0,0,.25);
+}
+
+[data-theme="y2k"] .theme-button:active,
+[data-theme="y2k"] .browse-button:active,
+[data-theme="y2k"] .primary-button:active {
+
+  transform: translateY(1px);
+
+  background:
+    linear-gradient(
+      180deg,
+      #cfcfcf,
+      #b8b8b8
+    );
+
+  box-shadow:
+    inset 0 2px 5px rgba(0,0,0,.25);
 }

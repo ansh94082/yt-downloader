@@ -1,7 +1,7 @@
 import { app, BrowserWindow , dialog , ipcMain} from 'electron';
 import store from "./settingsStore.js";
 import path from "path";
-
+import fs from "fs";
 
 
 const createWindow = () => {
@@ -42,7 +42,22 @@ app.on('window-all-closed', () => {
 
 console.log(store.path);
 
-ipcMain.handle("settings:get", () => {
+
+ipcMain.handle("settings:get", async () => {    // provides settings from electron store , the only discrepancy is in the case of download path which can be checked for
+
+  if (!store.get("downloadFolder")) {
+
+    const defaultPath = path.join(
+      app.getPath("downloads"),
+      "YT Downloader"
+    );
+
+    store.set(
+      "downloadFolder",
+      defaultPath
+    );
+  }
+
   return store.store;
 });
 
@@ -65,19 +80,34 @@ console.log(
   )
 );
 
-ipcMain.handle("folder:select", () => {
 
-  
+ipcMain.handle("folder:select", async () => {
 
-  const result = dialog.showOpenDialog({properties: ["openDirectory"]});
+  const result = await dialog.showOpenDialog({ properties: ["openDirectory"]});
 
-  
-  if(result.canceled){
+  console.log(result);
+
+  if (result.canceled) {
     return null;
   }
-  return result.filepaths[0];
-    
+
+  return result.filePaths[0];
+});
 
 
 
+ipcMain.handle("downloads:path", () => {
+
+  const downloadPath = path.join(
+    app.getPath("downloads"),
+    "YT Downloader"
+  );
+
+  if (!fs.existsSync(downloadPath)) {
+    fs.mkdirSync(downloadPath, {
+      recursive: true
+    });
+  }
+
+  return downloadPath;
 });

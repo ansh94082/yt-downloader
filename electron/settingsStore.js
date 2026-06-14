@@ -3,7 +3,7 @@ import Store from "electron-store";
 const store = new Store({
   defaults: {
     theme: "frutiger",
-    downloadFolder: "",
+    downloadFolder: null,
     audioFormat: "mp3",
     audioQuality: "320",
     videoFormat: "mp4",
