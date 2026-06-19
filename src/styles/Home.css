@@ -1,0 +1,150 @@
+.home-page {
+
+  width: 100%;
+
+  padding: 2rem;
+
+  color: var(--text);
+
+  box-sizing: border-box;
+
+  background: var(--card-bg);
+}
+
+.home-hero {
+
+  text-align: center;
+
+  margin-bottom: 2rem;
+}
+
+.home-title {
+
+  font-size: 3rem;
+
+  font-weight: 800;
+
+  margin-bottom: .5rem;
+}
+
+.home-subtitle {
+
+  opacity: .75;
+
+  font-size: 1.1rem;
+}
+
+.input-bar {
+
+  display: flex;
+
+  gap: 1rem;
+
+  margin-bottom: 2rem;
+}
+
+.url-input {
+
+  flex: 1;
+
+  height: 54px;
+
+  padding: 0 1rem;
+
+  border-radius: 10px;
+
+  border: 1px solid var(--border);
+
+  background: var(--input-bg);
+
+  color: var(--text);
+
+  font-size: 1rem;
+
+  outline: none;
+}
+
+.url-input:focus {
+
+  border-color: var(--accent);
+
+  box-shadow:
+    0 0 0 2px
+    color-mix(
+      in srgb,
+      var(--accent) 20%,
+      transparent
+    );
+}
+
+.analyze-btn {
+
+  min-width: 140px;
+}
+
+.downloads-container {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 1.5rem;
+}
+
+.download-card {
+
+  border-radius: 14px;
+
+  padding: 1.25rem;
+}
+
+.card-title {
+
+  color: var(--text);
+}
+
+.card-channel,
+.card-duration {
+
+  color: var(--text);
+
+  opacity: .75;
+}
+
+.download-options {
+
+  display: flex;
+
+  gap: 1rem;
+
+  margin: 1rem 0;
+}
+
+.download-options select {
+
+  flex: 1;
+
+  height: 42px;
+
+  border-radius: 8px;
+
+  color: var(--text);
+}
+
+@media (max-width: 900px) {
+
+  .input-bar {
+
+    flex-direction: column;
+  }
+
+  .analyze-btn {
+
+    width: 100%;
+  }
+
+  .download-options {
+
+    flex-direction: column;
+  }
+}
