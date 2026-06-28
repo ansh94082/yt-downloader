@@ -15,7 +15,11 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.0",
+    "child_process": "^1.0.2",
     "electron-store": "^11.0.2",
+    "lucide-react": "^1.21.0",
+    "os": "^0.1.2",
+    "queue": "^7.0.0",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "react-router-dom": "^7.17.0",

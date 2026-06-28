@@ -7,7 +7,8 @@ const store = new Store({
     audioFormat: "mp3",
     audioQuality: "320",
     videoFormat: "mp4",
-    videoQuality: "1080"
+    videoQuality: "1080",
+
   }
 });
 

@@ -45,7 +45,9 @@
 
 .url-input {
 
-  flex: 1;
+
+  flex: 1 1 auto;
+  min-width: 0;
 
   height: 54px;
 
@@ -76,12 +78,11 @@
       transparent
     );
 }
-
 .analyze-btn {
-
+  flex: 0 0 140px;
   min-width: 140px;
+  height: 54px;
 }
-
 .downloads-container {
 
   display: flex;

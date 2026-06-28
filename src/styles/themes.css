@@ -1,710 +1,262 @@
 /* =====================================================
-   DARK
+   DARK THEME
 ===================================================== */
 
 [data-theme="dark"] {
-
-  --font-main:
-    "Inter",
-    "Segoe UI",
-    sans-serif;
-
+  --font-main: "Inter", "Segoe UI", sans-serif;
   --sidebar-bg: #18181b;
   --sidebar-text: #f4f4f5;
   --sidebar-hover: #27272a;
   --sidebar-active: #3f3f46;
-
   --card-bg: #232326;
-
-  --input-bg:
-    linear-gradient(
-      180deg,
-      #2d2d31,
-      #232326
-    );
-
+  --input-bg: linear-gradient(180deg, #2d2d31, #232326);
   --border: #3a3a40;
-
   --hover: #323238;
-
   --accent: #3b82f6;
-
   --text: #f4f4f5;
+  --button-text: white;
 }
 
-[data-theme="dark"] .settings-card {
-
-  background:
-    linear-gradient(
-      180deg,
-      #2a2a2f,
-      #232326
-    );
-
+[data-theme="dark"] .settings-card,
+[data-theme="dark"] .download-card {
+  background: linear-gradient(180deg, #2a2a2f, #232326);
   border: 1px solid #3a3a40;
-
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.04),
-    0 8px 20px rgba(0,0,0,.35);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 8px 20px rgba(0, 0, 0, 0.35);
 }
 
 [data-theme="dark"] .folder-path,
-[data-theme="dark"] .setting-item select {
-
+[data-theme="dark"] .setting-item select,
+[data-theme="dark"] .url-input,
+[data-theme="dark"] .download-options select {
   background: var(--input-bg);
-
   border: 1px solid #444;
-
-  color: white;
-
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.04);
+  color: var(--text);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
 [data-theme="dark"] .theme-button,
 [data-theme="dark"] .browse-button,
 [data-theme="dark"] .primary-button {
-
-  background:
-    linear-gradient(
-      180deg,
-      #43434d,
-      #27272f
-    );
-
+  background: linear-gradient(180deg, #43434d, #27272f);
   border: 1px solid #5b5b63;
-
   color: white;
-
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.08),
-    0 2px 8px rgba(0,0,0,.4);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 2px 8px rgba(0, 0, 0, 0.4);
 }
 
 [data-theme="dark"] .theme-button:hover,
 [data-theme="dark"] .browse-button:hover,
 [data-theme="dark"] .primary-button:hover {
-
-  background:
-    linear-gradient(
-      180deg,
-      #555561,
-      #343440
-    );
+  background: linear-gradient(180deg, #555561, #343440);
 }
-
-
-
-
-
-[data-theme="dark"] .download-card {
-
-  background:
-    linear-gradient(
-      180deg,
-      #2a2a2f,
-      #232326
-    );
-
-  border: 1px solid #3a3a40;
-
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.04),
-    0 8px 20px rgba(0,0,0,.35);
-}
-
-[data-theme="dark"] .url-input,
-[data-theme="dark"] .download-options select {
-
-  background: var(--input-bg);
-
-  color: var(--text);
-
-  border: 1px solid #444;
-}
-
 
 [data-theme="dark"] .home-title {
-
   color: white;
-
-  text-shadow:
-    0 0 20px rgba(59,130,246,.25);
+  text-shadow: 0 0 20px rgba(59, 130, 246, 0.25);
 }
 
 [data-theme="dark"] .input-bar {
-
   padding: 1rem;
-
   border-radius: 14px;
-
-  background:
-    linear-gradient(
-      180deg,
-      #2b2b30,
-      #232326
-    );
-
+  background: linear-gradient(180deg, #2b2b30, #232326);
   border: 1px solid #3a3a40;
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* =====================================================
-   FRUTIGER AERO
+   FRUTIGER AERO THEME
 ===================================================== */
 
 [data-theme="frutiger"] {
-
-  --font-main:
-    "Segoe UI",
-    "Tahoma",
-    sans-serif;
-
-  --sidebar-bg:
-    linear-gradient(
-      180deg,
-      rgba(210,255,235,.95),
-      rgba(175,230,255,.95)
-    );
-
+  --font-main: "Segoe UI", "Tahoma", sans-serif;
+  --sidebar-bg: linear-gradient(180deg, rgba(210, 255, 235, 0.95), rgba(175, 230, 255, 0.95));
   --sidebar-text: #083344;
-
-  --sidebar-hover:
-    rgba(255,255,255,.35);
-
-  --sidebar-active:
-    rgba(0,180,255,.22);
-
-  --card-bg:
-    rgba(255,255,255,.4);
-
-  --input-bg:
-    linear-gradient(
-      to bottom,
-      rgba(255,255,255,.95),
-      rgba(220,255,250,.85)
-    );
-
-  --border:
-    rgba(255,255,255,.45);
-
-  --hover:
-    rgba(45,172,142,.35);
-
+  --sidebar-hover: rgba(255, 255, 255, 0.35);
+  --sidebar-active: rgba(0, 180, 255, 0.22);
+  --card-bg: rgba(255, 255, 255, 0.4);
+  --input-bg: linear-gradient(to bottom, rgba(255, 255, 255, 0.95), rgba(220, 255, 250, 0.85));
+  --border: rgba(255, 255, 255, 0.45);
+  --hover: rgba(45, 172, 142, 0.35);
   --accent: #2ca9ff;
-
   --text: #083344;
+  --button-text: white;
 }
 
-[data-theme="frutiger"] .settings-card {
-
+[data-theme="frutiger"] .settings-card,
+[data-theme="frutiger"] .download-card {
   position: relative;
-
   overflow: hidden;
-
-  background:
-    linear-gradient(
-      to bottom,
-      rgba(255,255,255,.75),
-      rgba(200,245,255,.45)
-    );
-
   backdrop-filter: blur(18px);
-
-  border:
-    1px solid rgba(255,255,255,.5);
-
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.9),
-    0 8px 18px rgba(0,120,255,.12);
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.75), rgba(200, 245, 255, 0.45));
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 8px 18px rgba(0, 120, 255, 0.12);
 }
 
 [data-theme="frutiger"] .settings-card::before {
-
   content: "";
-
   position: absolute;
-
   left: 0;
   right: 0;
   top: 0;
-
   height: 40%;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.4), transparent);
+}
 
-  background:
-    linear-gradient(
-      to bottom,
-      rgba(255,255,255,.4),
-      transparent
-    );
+[data-theme="frutiger"] .download-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.25), transparent);
+  pointer-events: none;
 }
 
 [data-theme="frutiger"] .folder-path,
-[data-theme="frutiger"] .setting-item select {
-
+[data-theme="frutiger"] .setting-item select,
+[data-theme="frutiger"] .url-input,
+[data-theme="frutiger"] .download-options select {
   background: var(--input-bg);
-
-  border:
-    1px solid rgba(255,255,255,.6);
-
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.95),
-    inset 0 -1px 2px rgba(0,0,0,.12),
-    0 3px 8px rgba(0,120,255,.08);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.95), inset 0 -1px 2px rgba(0, 0, 0, 0.12), 0 3px 8px rgba(0, 120, 255, 0.08);
 }
 
 [data-theme="frutiger"] .theme-button,
 [data-theme="frutiger"] .browse-button,
 [data-theme="frutiger"] .primary-button {
-
   position: relative;
-
   overflow: hidden;
-
-  border-radius: 999px;
-
+  border-radius: 29px;
   border: 1px solid #58d6ff;
-
   color: white;
-
-  text-shadow:
-    0 1px 2px rgba(0,0,0,.35);
-
-  background:
-    linear-gradient(
-      to bottom,
-      #d8fff7 0%,
-      #85f8dc 15%,
-      #3ed7c0 45%,
-      #2ca9ff 100%
-    );
-
-  box-shadow:
-    inset 0 2px 0 rgba(255,255,255,.9),
-    inset 0 -2px 4px rgba(0,0,0,.15),
-    0 0 12px rgba(0,200,255,.25),
-    0 4px 12px rgba(0,0,0,.18);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+  background: linear-gradient(to bottom, #d8fff7 0%, #85f8dc 15%, #3ed7c0 45%, #2ca9ff 100%);
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.9), inset 0 -2px 4px rgba(0, 0, 0, 0.15), 0 0 12px rgba(0, 200, 255, 0.25), 0 4px 12px rgba(0, 0, 0, 0.18);
 }
 
 [data-theme="frutiger"] .theme-button::before,
 [data-theme="frutiger"] .browse-button::before,
 [data-theme="frutiger"] .primary-button::before {
-
   content: "";
-
   position: absolute;
-
   left: 4px;
   right: 4px;
   top: 4px;
-
   height: 45%;
-
   border-radius: inherit;
-
-  background:
-    linear-gradient(
-      to bottom,
-      rgba(255,255,255,.85),
-      rgba(255,255,255,.15)
-    );
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.15));
 }
 
 [data-theme="frutiger"] .theme-button:hover,
 [data-theme="frutiger"] .browse-button:hover,
 [data-theme="frutiger"] .primary-button:hover {
-
-  box-shadow:
-    inset 0 2px 0 rgba(255,255,255,1),
-    inset 0 -2px 4px rgba(0,0,0,.15),
-    0 0 18px rgba(0,200,255,.45),
-    0 6px 16px rgba(0,0,0,.22);
-}
-
-
-[data-theme="frutiger"] .download-card {
-
-  position: relative;
-
-  overflow: hidden;
-
-  backdrop-filter: blur(18px);
-
-  background:
-    linear-gradient(
-      to bottom,
-      rgba(255,255,255,.75),
-      rgba(200,245,255,.45)
-    );
-
-  border:
-    1px solid rgba(255,255,255,.5);
-
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.9),
-    0 8px 18px rgba(0,120,255,.12);
-}
-
-[data-theme="frutiger"] .download-card::before {
-
-  content: "";
-
-  position: absolute;
-
-  inset: 0;
-
-  background:
-    linear-gradient(
-      to bottom,
-      rgba(255,255,255,.25),
-      transparent
-    );
-
-  pointer-events: none;
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 1), inset 0 -2px 4px rgba(0, 0, 0, 0.15), 0 0 18px rgba(0, 200, 255, 0.45), 0 6px 16px rgba(0, 0, 0, 0.22);
 }
 
 [data-theme="frutiger"] .input-bar {
-
   padding: 1rem;
-
   border-radius: 20px;
-
-  background:
-    rgba(255,255,255,.22);
-
-  border:
-    1px solid rgba(255,255,255,.4);
-
+  background: rgba(255, 255, 255, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.4);
   backdrop-filter: blur(20px);
 }
 
 [data-theme="frutiger"] .home-title {
-
   color: #0b5c84;
-
-  text-shadow:
-    0 0 20px rgba(0,180,255,.35);
+  text-shadow: 0 0 20px rgba(0, 180, 255, 0.35);
 }
-
-[data-theme="frutiger"] .url-input,
-[data-theme="frutiger"] .download-options select {
-
-  background: var(--input-bg);
-
-  border:
-    1px solid rgba(255,255,255,.6);
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 /* =====================================================
-   Y2K CHROME
+   Y2K CHROME THEME
 ===================================================== */
 
 [data-theme="y2k"] {
-
-  --font-main:
-    "Trebuchet MS",
-    "Verdana",
-    sans-serif;
-
-  --sidebar-bg:
-    linear-gradient(
-      180deg,
-      #efefef,
-      #bdbdbd
-    );
-
+  --font-main: "Trebuchet MS", "Verdana", sans-serif;
+  --sidebar-bg: linear-gradient(180deg, #efefef, #bdbdbd);
   --sidebar-text: #111827;
-
   --sidebar-hover: #d8d8d8;
-
   --sidebar-active: #b7cbff;
-
-  --card-bg:
-    linear-gradient(
-      180deg,
-      #f6f6f6,
-      #cfcfcf
-    );
-
-  --input-bg:
-    linear-gradient(
-      180deg,
-      #ffffff,
-      #dddddd
-    );
-
+  --card-bg: linear-gradient(180deg, #f6f6f6, #cfcfcf);
+  --input-bg: linear-gradient(180deg, #ffffff, #dddddd);
   --border: #8a8a8a;
-
   --hover: #ececec;
-
   --accent: #4f8dff;
-
   --text: #111827;
+  --button-text: #9fa0a4;
 }
 
-[data-theme="y2k"] .settings-card {
-
+[data-theme="y2k"] .settings-card,
+[data-theme="y2k"] .download-card {
   position: relative;
-
   overflow: hidden;
-
-  background:
-    linear-gradient(
-      180deg,
-      #fafafa,
-      #cfcfcf
-    );
-
+  background: linear-gradient(180deg, #fafafa, #cfcfcf);
   border: 1px solid #8a8a8a;
-
-  box-shadow:
-    inset 0 1px white,
-    inset 0 -1px #7a7a7a,
-    0 4px 10px rgba(0,0,0,.15);
+  box-shadow: inset 0 1px white, inset 0 -1px #7a7a7a, 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
-[data-theme="y2k"] .settings-card::before {
-
+[data-theme="y2k"] .settings-card::before,
+[data-theme="y2k"] .download-card::before {
   content: "";
-
   position: absolute;
-
   left: 0;
   right: 0;
   top: 0;
-
   height: 35%;
-
-  background:
-    linear-gradient(
-      to bottom,
-      rgba(255,255,255,.45),
-      transparent
-    );
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.45), transparent);
 }
 
 [data-theme="y2k"] .folder-path,
-[data-theme="y2k"] .setting-item select {
-
+[data-theme="y2k"] .setting-item select,
+[data-theme="y2k"] .url-input,
+[data-theme="y2k"] .download-options select {
   background: var(--input-bg);
-
   border: 1px solid #8f8f8f;
-
-  box-shadow:
-    inset 0 1px white,
-    inset 0 -1px #9a9a9a;
+  box-shadow: inset 0 1px white, inset 0 -1px #9a9a9a;
 }
 
 [data-theme="y2k"] .theme-button,
 [data-theme="y2k"] .browse-button,
 [data-theme="y2k"] .primary-button {
-
   position: relative;
-
   overflow: hidden;
-
   border-radius: 4px;
-
   border: 1px solid #7b7b7b;
-
   color: #111;
-
   font-weight: 600;
-
-  text-shadow:
-    0 1px 0 rgba(255,255,255,.9);
-
-  background:
-    linear-gradient(
-      180deg,
-      #fefefe 0%,
-      #ececec 45%,
-      #c7c7c7 100%
-    );
-
-  box-shadow:
-    inset 0 1px 0 white,
-    inset 0 -1px #888,
-    0 2px 4px rgba(0,0,0,.18);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.9);
+  background: linear-gradient(180deg, #fefefe 0%, #ececec 45%, #c7c7c7 100%);
+  box-shadow: inset 0 1px 0 white, inset 0 -1px #888, 0 2px 4px rgba(0, 0, 0, 0.18);
 }
 
 [data-theme="y2k"] .theme-button::before,
 [data-theme="y2k"] .browse-button::before,
 [data-theme="y2k"] .primary-button::before {
-
   display: none;
 }
 
 [data-theme="y2k"] .theme-button:hover,
 [data-theme="y2k"] .browse-button:hover,
 [data-theme="y2k"] .primary-button:hover {
-
-  background:
-    linear-gradient(
-      180deg,
-      #ffffff,
-      #f0f0f0,
-      #d4d4d4
-    );
-
-  box-shadow:
-    inset 0 1px white,
-    inset 0 -1px #777,
-    0 4px 8px rgba(0,0,0,.25);
+  background: linear-gradient(180deg, #ffffff, #f0f0f0, #d4d4d4);
+  box-shadow: inset 0 1px white, inset 0 -1px #777, 0 4px 8px rgba(0, 0, 0, 0.25);
 }
 
 [data-theme="y2k"] .theme-button:active,
 [data-theme="y2k"] .browse-button:active,
 [data-theme="y2k"] .primary-button:active {
-
   transform: translateY(1px);
-
-  background:
-    linear-gradient(
-      180deg,
-      #cfcfcf,
-      #b8b8b8
-    );
-
-  box-shadow:
-    inset 0 2px 5px rgba(0,0,0,.25);
-}
-
-[data-theme="y2k"] .download-card {
-
-  position: relative;
-
-  overflow: hidden;
-
-  background:
-    linear-gradient(
-      180deg,
-      #fafafa,
-      #cfcfcf
-    );
-
-  border: 1px solid #8a8a8a;
-
-  box-shadow:
-    inset 0 1px white,
-    inset 0 -1px #7a7a7a,
-    0 4px 10px rgba(0,0,0,.15);
-}
-
-[data-theme="y2k"] .download-card::before {
-
-  content: "";
-
-  position: absolute;
-
-  left: 0;
-  right: 0;
-  top: 0;
-
-  height: 35%;
-
-  background:
-    linear-gradient(
-      to bottom,
-      rgba(255,255,255,.45),
-      transparent
-    );
+  background: linear-gradient(180deg, #cfcfcf, #b8b8b8);
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.25);
 }
 
 [data-theme="y2k"] .input-bar {
-
   padding: 12px;
-
   border-radius: 8px;
-
-  background:
-    linear-gradient(
-      180deg,
-      #f4f4f4,
-      #c8c8c8
-    );
-
-  border:
-    1px solid #8a8a8a;
-
-  box-shadow:
-    inset 0 1px white,
-    inset 0 -1px #7a7a7a;
+  background: linear-gradient(180deg, #f4f4f4, #c8c8c8);
+  border: 1px solid #8a8a8a;
+  box-shadow: inset 0 1px white, inset 0 -1px #7a7a7a;
 }
 
 [data-theme="y2k"] .home-title {
-
   color: #1b1b1b;
-
   letter-spacing: 2px;
-
-  text-shadow:
-    1px 1px 0 white,
-    2px 2px 0 rgba(0,0,0,.15);
-}
-
-[data-theme="y2k"] .url-input,
-[data-theme="y2k"] .download-options select {
-
-  background: var(--input-bg);
-
-  border: 1px solid #8f8f8f;
-
-  box-shadow:
-    inset 0 1px white,
-    inset 0 -1px #9a9a9a;
+  text-shadow: 1px 1px 0 white, 2px 2px 0 rgba(0, 0, 0, 0.15);
 }

@@ -8,25 +8,24 @@ function Home() {
 
   const [downloads, setDownloads] = useState([]);
 
+
+  
+
   const handleAnalyze = async () => {
 
     if (!url.trim()) {
       return;
     }
 
-    // later:
-    // const videoData =
-    //   await window.api.analyzeVideo(url);
+    const videoData = await window.api.analyzeVideo(url);
+    console.log(videoData);
 
-    const videoData = {
-      id: Date.now(),
-      url
-    };
+    if (!videoData) {
+      console.error("NO DATA RETURNED");
+      return;
+    }
 
-    setDownloads(prev => [
-      videoData,
-      ...prev
-    ]);
+    setDownloads([videoData]);
 
     setUrl("");
   };
@@ -47,7 +46,7 @@ function Home() {
         </h1>
 
         <p className="home-subtitle">
-          Download videos and audio 
+          Download videos and audio
         </p>
       </div>
 
@@ -64,7 +63,7 @@ function Home() {
         />
 
         <button
-          className="analyze-btn bg"
+          className="analyze-btn primary-button"
           onClick={handleAnalyze}
         >
           Enter
@@ -74,13 +73,18 @@ function Home() {
 
       <div className="downloads-container">
 
-        {downloads.map(item => (
-          <DownloadCard
-            key={item.id}
-            data={item}
-          />
-        ))}
+        <div className="downloads-container">
 
+          {downloads.map(item =>
+            item.entries?.map(video => (
+              <DownloadCard
+                key={video.id}
+                data={video}
+              />
+            ))
+          )}
+
+        </div>
       </div>
 
     </div>
