@@ -25,7 +25,14 @@ contextBridge.exposeInMainWorld(
 
     getStore: async () => {
       return ipcRenderer.invoke("store:get");
-    }
+    },
+
+    handleEnter: async (item) => {
+      return ipcRenderer.invoke("job:Enter", item)
+    },
+    startDownload : async (item) => {
+      return ipcRenderer.invoke("download:start" , item);
+    },
 
   }
 );

@@ -6,7 +6,7 @@
   "main": "./electron/main.js",
   "scripts": {
     "vite": "vite",
-    "electron": "wait-on http://localhost:3000 && electron .",
+    "electron": "wait-on http://localhost:6767 && electron .",
     "dev": "concurrently \"npm run vite\" \"npm run electron\"",
     "build": "vite build",
     "lint": "eslint .",

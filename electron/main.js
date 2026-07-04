@@ -6,6 +6,8 @@ import { softSearch } from './yt-dlp/softSearch.js';
 import { log } from 'console';
 import { getBinaryPaths } from './yt-dlp/binaries.js';
 import { verifyBinaries } from './yt-dlp/verify.js';
+import jobStore from './jobStore.js'
+import downloadManager from "./utilities/downloadManager.js";
 
 
 const createWindow = () => {
@@ -25,7 +27,7 @@ const createWindow = () => {
       nodeIntegration: true
     }
   });
-  win.loadURL('http://localhost:3000');
+  win.loadURL('http://localhost:6767');
 };
 app.whenReady().then(async () => {
   try {
@@ -172,7 +174,7 @@ ipcMain.handle("downloads:path", () => {     // find the default downloads locat
 });
 
 
-ipcMain.handle("analyze:input", async (_, url) => {
+ipcMain.handle("analyze:input", async (_, url) => { // handle searches by user in the input box
   console.log("MAIN RECEIVED:", url);
   try {
     const result = await softSearch(url);
@@ -183,11 +185,35 @@ ipcMain.handle("analyze:input", async (_, url) => {
   }
 });
 
-ipcMain.handle("store:get" , async () => {
+ipcMain.handle("store:get", async () => { // returns download folder
 
   const dat = await store.get("downloadFolder");
   console.log(dat)
   return dat
+
+
+})
+
+ipcMain.handle("job:Enter", (event , item) => { // update the status of failed jobs
+
+  jobStore.set("downloads", [
+    ...jobStore.get("downloads"),
+    item
+  ]);
+  console.log(jobStore.get("downloads"));
+  return true;
+
+
+
+
+})
+
+ipcMain.handle("download:start", async (event ,item) => {
+
+  await downloadManager.enqueue(item);
+  console.log(item , "inside main process");
+
+
 
 
 })

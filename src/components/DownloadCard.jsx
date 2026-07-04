@@ -4,11 +4,10 @@ import "../styles/themes.css";
 
 
 
-
 function DownloadCard({ data }) {
   const [open, setOpen] = useState(false);
   const [tab, setTab] = useState("video");
-  const [stats, setStats] = useState({ type: "Video", quality: "highest Quality", format: "mp4" });
+  const [stats, setStats] = useState({ type: "video", quality: "highest", format: "mp4" });
   const [videodef, setVideodef] = useState(false);
   const [audiodef, setAudiodef] = useState(false);
   const [audioformat, setAudioformat] = useState(false); // this serves a simple but important purpose , when user changes from video to audio , its important to select the format , in case of not doing this we may pick quality in audio , but video format  
@@ -23,10 +22,36 @@ function DownloadCard({ data }) {
 
   }, [stats])
 
-
-  const handleDownload = () => {
+ 
+  const handleDownload = async () => {
 
     console.log("querry recieved");
+
+    const downPath = await window.api.getDefaultDownloadPath();
+
+    let vidObj = {
+      id: data.id,
+      title: data.title,
+      thumbnail: data.thumbnail,
+      type: stats.type,
+      format: stats.format,
+      quality: stats.quality,
+      downloadPath: downPath,
+      status: "queued",
+      createdAt: Date.now(),
+      startedAt: null,
+
+      finishedAt: null,
+      progress: 0,
+      speed: null,
+      eta: null,
+      error: null
+
+    }
+
+
+    const putDown = await window.api.startDownload(vidObj);
+    console.log(vidObj); 
 
   }
 
@@ -280,7 +305,7 @@ function DownloadCard({ data }) {
                     color: "var(--text)",
                   }}
                 >
-                  <option>Highest </option>
+                  <option>highest </option>
                   <option>1080p</option>
                   <option>720p</option>
                   <option>480p</option>
