@@ -5,6 +5,7 @@ class DownloadManager {    // seperate class to manage the download queue
     constructor() {
         this.queue = downloadQueue;
         this.isProcessing = false;
+        this.activeDownloads = new Map();
     }
     async enqueue(item) {
         downloadQueue.enqueue(item);
@@ -21,8 +22,10 @@ class DownloadManager {    // seperate class to manage the download queue
 
         try {
             await startDownload(item);
+        } catch (err) {
+            console.error("Download failed:", err);
         } finally {
-            this.isProcessing = false;  // after processing either success or fail , set the status of queue to not-processing , and call back the process to start the next download .
+            this.isProcessing = false;
             this.process();
         }
     }

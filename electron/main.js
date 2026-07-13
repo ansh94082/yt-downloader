@@ -10,25 +10,24 @@ import jobStore from './jobStore.js'
 import downloadManager from "./utilities/downloadManager.js";
 
 
+let mainWindow;
+
 const createWindow = () => {
-  const win = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
     title: "YT Downloader",
     backgroundColor: "#e2cba9",
-
     webPreferences: {
-      preload: path.join(
-        app.getAppPath(),
-        "electron",
-        "preload.js"
-      ),
+      preload: path.join(app.getAppPath(), "electron", "preload.js"),
       contextIsolation: true,
-      nodeIntegration: true
-    }
+      nodeIntegration: true,
+    },
   });
-  win.loadURL('http://localhost:6767');
+
+  mainWindow.loadURL("http://localhost:6767");
 };
+
 app.whenReady().then(async () => {
   try {
     await verifyBinaries();
@@ -194,7 +193,7 @@ ipcMain.handle("store:get", async () => { // returns download folder
 
 })
 
-ipcMain.handle("job:Enter", (event , item) => { // update the status of failed jobs
+ipcMain.handle("job:Enter", (event, item) => { // update the status of failed jobs
 
   jobStore.set("downloads", [
     ...jobStore.get("downloads"),
@@ -208,12 +207,32 @@ ipcMain.handle("job:Enter", (event , item) => { // update the status of failed j
 
 })
 
-ipcMain.handle("download:start", async (event ,item) => {
+ipcMain.handle("download:jobAdded", async (event, item) => { // adds the download job to queue
 
   await downloadManager.enqueue(item);
-  console.log(item , "inside main process");
+  console.log(item, "inside main process");
 
+  mainWindow.webContents.send("download:started", item);
 
+  return true;
 
 
 })
+
+ipcMain.handle("jobs:get" , async () => {
+
+  const dat = await store.get("downloads");
+  console.log(dat)
+  return dat
+
+})
+
+ipcMain.handle("download:pause", (_, id) => {
+    const job = downloadManager.activeDownloads.get(id);
+
+    if (!job) return false;
+
+    job.kill("SIGTERM");
+
+    return true;
+});

@@ -30,9 +30,27 @@ contextBridge.exposeInMainWorld(
     handleEnter: async (item) => {
       return ipcRenderer.invoke("job:Enter", item)
     },
-    startDownload : async (item) => {
-      return ipcRenderer.invoke("download:start" , item);
+    startDownload: async (item) => {
+      return ipcRenderer.invoke("download:jobAdded", item);
     },
+    onDownloadStarted: (callback) => {
+      const listener = (_, item) => callback(item);
+
+      ipcRenderer.on("download:started", listener);
+
+      return () => {
+        ipcRenderer.removeListener("download:started", listener);
+      };
+    },
+
+    getJobs: async () => {
+
+      return ipcRenderer.invoke("jobs:get");
+
+    },
+    pauseDownload : async (id) => {
+      return ipcRenderer.invoke("download:pause" ,id);
+    } 
 
   }
 );

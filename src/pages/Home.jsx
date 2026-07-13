@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState , useEffect } from "react";
 import DownloadCard from "../components/DownloadCard";
 import "../styles/Home.css";
+import toast from "react-hot-toast";
 
 function Home() {
 
@@ -9,7 +10,12 @@ function Home() {
   const [downloads, setDownloads] = useState([]);
 
 
-  
+  useEffect(() => {
+    window.api.onDownloadStarted((item) => {
+      toast.success(`${item.title} added to queue`);
+    });
+  }, []);
+
 
   const handleAnalyze = async () => {
 
