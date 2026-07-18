@@ -50,7 +50,7 @@ function DownloadCard({ data }) {
     }
 
 
-    const putDown = await window.api.startDownload(vidObj);
+    await window.api.startDownload(vidObj);
     console.log(vidObj); 
 
   }

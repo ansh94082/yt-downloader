@@ -1,14 +1,12 @@
-import { app, BrowserWindow, dialog, ipcMain } from 'electron';
+import { app, BrowserWindow, dialog, ipcMain, shell } from "electron";
+/* global process */
 import store from "./settingsStore.js";
 import path from "path";
 import fs from "fs";
-import { softSearch } from './yt-dlp/softSearch.js';
-import { log } from 'console';
-import { getBinaryPaths } from './yt-dlp/binaries.js';
-import { verifyBinaries } from './yt-dlp/verify.js';
-import jobStore from './jobStore.js'
+import { softSearch } from "./yt-dlp/softSearch.js";
+import { getBinaryPaths } from "./yt-dlp/binaries.js";
+import { verifyBinaries } from "./yt-dlp/verify.js";
 import downloadManager from "./utilities/downloadManager.js";
-
 
 let mainWindow;
 
@@ -25,68 +23,55 @@ const createWindow = () => {
     },
   });
 
+  downloadManager.attachWindow(mainWindow);
   mainWindow.loadURL("http://localhost:6767");
 };
 
 app.whenReady().then(async () => {
   try {
     await verifyBinaries();
-    console.log('Binaries verified');
+    console.log("Binaries verified");
   } catch (err) {
-    console.error('Binary verification failed:', err);
+    console.error("Binary verification failed:", err);
     app.quit();
     return;
   }
 
   console.log(getBinaryPaths());
-
   createWindow();
 
-  app.on('activate', () => {
+  app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) {
       createWindow();
     }
   });
 });
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
+
+app.on("window-all-closed", () => {
+  if (process.platform !== "darwin") {
     app.quit();
   }
 });
-
-console.log(store.path);
-
 
 const platformFiles = {
   win32: {
     ytdlp: "yt-dlp.exe",
     ffmpeg: "ffmpeg.exe",
-    plocation: "../resources/win32"
+    plocation: "../resources/win32",
   },
   linux: {
     ytdlp: "yt-dlp",
     ffmpeg: "ffmpeg",
-    plocation: "../resources/linux"
+    plocation: "../resources/linux",
   },
   darwin: {
     ytdlp: "yt-dlp_macos",
     ffmpeg: "ffmpeg",
-    plocation: "../resources/darwin"
+    plocation: "../resources/darwin",
   },
 };
 
-console.log(process.platform);
-console.log(process.platform);
-console.log(process.platform);
-console.log(process.platform);
-console.log(process.platform);
-console.log(process.platform);
-
 store.platform = process.platform;
-
-console.log("hello");
-
-console.log(store.platform);
 
 const files = platformFiles[process.platform];
 
@@ -94,58 +79,22 @@ if (!files) {
   throw new Error(`Unsupported platform: ${process.platform}`);
 }
 
-
-
-
-
-
-
-// All the ipc api definitions below
-
-ipcMain.handle("settings:get", async () => {    // provides settings from electron store , the only discrepancy is in the case of download path which can be checked for
-
+ipcMain.handle("settings:get", async () => {
   if (!store.get("downloadFolder")) {
-
-    const defaultPath = path.join(
-      app.getPath("downloads"),
-      "YT Downloader"
-    );
-
-    store.set(
-      "downloadFolder",
-      defaultPath
-    );
+    const defaultPath = path.join(app.getPath("downloads"), "YT Downloader");
+    store.set("downloadFolder", defaultPath);
   }
 
   return store.store;
 });
 
-
-console.log(store.path);
-
-ipcMain.handle("settings:save", (_, settings) => {  // save settings on pressing save in settings
-  console.log("MAIN RECEIVED:", settings);
-
+ipcMain.handle("settings:save", (_, settings) => {
   store.store = settings;
-
   return true;
 });
-console.log(store.path);
 
-console.log(
-  path.join(
-    app.getAppPath(),
-    "electron",
-    "preload.js"
-  )
-);
-
-
-ipcMain.handle("folder:select", async () => {      // select custom downloads location
-
+ipcMain.handle("folder:select", async () => {
   const result = await dialog.showOpenDialog({ properties: ["openDirectory"] });
-
-  console.log(result);
 
   if (result.canceled) {
     return null;
@@ -154,85 +103,64 @@ ipcMain.handle("folder:select", async () => {      // select custom downloads lo
   return result.filePaths[0];
 });
 
-
-
-ipcMain.handle("downloads:path", () => {     // find the default downloads location
-
-  const downloadPath = path.join(
-    app.getPath("downloads"),
-    "YT Downloader"
-  );
+ipcMain.handle("downloads:path", () => {
+  const downloadPath = path.join(app.getPath("downloads"), "YT Downloader");
 
   if (!fs.existsSync(downloadPath)) {
-    fs.mkdirSync(downloadPath, {
-      recursive: true
-    });
+    fs.mkdirSync(downloadPath, { recursive: true });
   }
 
   return downloadPath;
 });
 
-
-ipcMain.handle("analyze:input", async (_, url) => { // handle searches by user in the input box
-  console.log("MAIN RECEIVED:", url);
+ipcMain.handle("analyze:input", async (_, url) => {
   try {
-    const result = await softSearch(url);
-    return result;
+    return await softSearch(url);
   } catch (err) {
     console.error(err);
     throw err;
   }
 });
 
-ipcMain.handle("store:get", async () => { // returns download folder
+ipcMain.handle("store:get", async () => store.get("downloadFolder"));
 
-  const dat = await store.get("downloadFolder");
-  console.log(dat)
-  return dat
-
-
-})
-
-ipcMain.handle("job:Enter", (event, item) => { // update the status of failed jobs
-
-  jobStore.set("downloads", [
-    ...jobStore.get("downloads"),
-    item
-  ]);
-  console.log(jobStore.get("downloads"));
+ipcMain.handle("job:Enter", (_, item) => {
+  downloadManager.persistJob(item);
   return true;
+});
 
-
-
-
-})
-
-ipcMain.handle("download:jobAdded", async (event, item) => { // adds the download job to queue
-
-  await downloadManager.enqueue(item);
-  console.log(item, "inside main process");
-
-  mainWindow.webContents.send("download:started", item);
-
+ipcMain.handle("download:jobAdded", async (_, item) => {
+  downloadManager.enqueue(item);
+  mainWindow?.webContents.send("download:started", item);
   return true;
+});
 
+ipcMain.handle("jobs:get", async () => downloadManager.getJobs());
+ipcMain.handle("download:pause", (_, id) => downloadManager.pauseDownload(id));
+ipcMain.handle("download:resume", (_, id) => downloadManager.resumeDownload(id));
+ipcMain.handle("download:cancel", (_, id) => downloadManager.cancelDownload(id));
 
-})
+ipcMain.handle("download:retry", async (_, id, stats) => {
+  const current = downloadManager.getJobs().find((job) => job.id === id);
+  if (!current) return false;
 
-ipcMain.handle("jobs:get" , async () => {
+  const retried = downloadManager.persistJob({
+    ...current,
+    ...stats,
+    status: "queued",
+    progress: 0,
+    error: null,
+    startedAt: null,
+    finishedAt: null,
+    createdAt: Date.now(),
+  });
 
-  const dat = await store.get("downloads");
-  console.log(dat)
-  return dat
+  downloadManager.enqueue(retried);
+  return true;
+});
 
-})
-
-ipcMain.handle("download:pause", (_, id) => {
-    const job = downloadManager.activeDownloads.get(id);
-
-    if (!job) return false;
-
-    job.kill("SIGTERM");
-
-    return true;
+ipcMain.handle("folder:open", async (_, folderPath) => {
+  if (!folderPath) return false;
+  await shell.openPath(folderPath);
+  return true;
 });

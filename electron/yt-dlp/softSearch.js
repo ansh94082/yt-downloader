@@ -22,7 +22,7 @@ export async function softSearch(query) {
         throw new Error('Ill-configured binaries');
     }
 
-    const { ytdlp, ffmpeg } = getBinaryPaths();
+    const { ytdlp } = getBinaryPaths();
 
     if (!isUrl(query)) {
 

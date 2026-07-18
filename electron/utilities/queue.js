@@ -1,20 +1,19 @@
-class Queue {  // initializes a queue 
+class Queue {
   constructor() {
     this.items = [];
     this.head = 0;
   }
 
-  enqueue(item) { // perform push to queue
+  enqueue(item) {
     this.items.push(item);
   }
-  
-  dequeue() { // remove an item
+
+  dequeue() {
     if (this.isEmpty()) return undefined;
 
     const item = this.items[this.head];
     this.head++;
 
-    // Cleanup
     if (this.head > 50 && this.head * 2 >= this.items.length) {
       this.items = this.items.slice(this.head);
       this.head = 0;
@@ -35,13 +34,22 @@ class Queue {  // initializes a queue
     return this.items.length - this.head;
   }
 
+  remove(id) {
+    this.items = this.items.filter((item) => item.id !== id);
+
+    if (this.head >= this.items.length) {
+      this.head = Math.max(0, this.items.length - 1);
+    }
+
+    return true;
+  }
+
   clear() {
     this.items = [];
     this.head = 0;
   }
 }
 
-const downloadQueue = new Queue(); // Export a single shared instance
-
+const downloadQueue = new Queue();
 
 export default downloadQueue;

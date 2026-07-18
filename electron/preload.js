@@ -3,39 +3,27 @@ import { contextBridge, ipcRenderer } from "electron";
 contextBridge.exposeInMainWorld(
   "api",
   {
-    getSettings: () =>
-      ipcRenderer.invoke("settings:get"),
+    getSettings: () => ipcRenderer.invoke("settings:get"),
 
-    saveSettings: (settings) =>
-      ipcRenderer.invoke(
-        "settings:save",
-        settings
-      ),
+    saveSettings: (settings) => ipcRenderer.invoke("settings:save", settings),
 
-    selectFolder: () =>
-      ipcRenderer.invoke("folder:select"),
+    selectFolder: () => ipcRenderer.invoke("folder:select"),
 
-    getDefaultDownloadPath: () =>
-      ipcRenderer.invoke("downloads:path"),
+    getDefaultDownloadPath: () => ipcRenderer.invoke("downloads:path"),
 
     analyzeVideo: async (url) => {
       console.log("PRELOAD:", url);
       return ipcRenderer.invoke("analyze:input", url);
     },
 
-    getStore: async () => {
-      return ipcRenderer.invoke("store:get");
-    },
+    getStore: async () => ipcRenderer.invoke("store:get"),
 
-    handleEnter: async (item) => {
-      return ipcRenderer.invoke("job:Enter", item)
-    },
-    startDownload: async (item) => {
-      return ipcRenderer.invoke("download:jobAdded", item);
-    },
+    handleEnter: async (item) => ipcRenderer.invoke("job:Enter", item),
+
+    startDownload: async (item) => ipcRenderer.invoke("download:jobAdded", item),
+
     onDownloadStarted: (callback) => {
       const listener = (_, item) => callback(item);
-
       ipcRenderer.on("download:started", listener);
 
       return () => {
@@ -43,17 +31,25 @@ contextBridge.exposeInMainWorld(
       };
     },
 
-    getJobs: async () => {
+    getJobs: async () => ipcRenderer.invoke("jobs:get"),
 
-      return ipcRenderer.invoke("jobs:get");
+    onJobsChanged: (callback) => {
+      const listener = (_, jobs) => callback(jobs);
+      ipcRenderer.on("downloads:updated", listener);
 
+      return () => {
+        ipcRenderer.removeListener("downloads:updated", listener);
+      };
     },
-    pauseDownload : async (id) => {
-      return ipcRenderer.invoke("download:pause" ,id);
-    } 
 
+    pauseDownload: async (id) => ipcRenderer.invoke("download:pause", id),
+
+    resumeDownload: async (id) => ipcRenderer.invoke("download:resume", id),
+
+    cancelDownload: async (id) => ipcRenderer.invoke("download:cancel", id),
+
+    retryDownload: async (id, stats) => ipcRenderer.invoke("download:retry", id, stats),
   }
 );
-
 
 console.log("PRELOAD LOADED");

@@ -11,9 +11,18 @@ function Home() {
 
 
   useEffect(() => {
-    window.api.onDownloadStarted((item) => {
+    const seenIds = new Set();
+
+    const unsubscribe = window.api.onDownloadStarted((item) => {
+      if (!item?.id || seenIds.has(item.id)) return;
+
+      seenIds.add(item.id);
       toast.success(`${item.title} added to queue`);
     });
+
+    return () => {
+      unsubscribe();
+    };
   }, []);
 
 

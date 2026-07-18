@@ -1,5 +1,6 @@
 import path from 'node:path';
 import { app } from 'electron';
+/* global process */
 
 export function getBinaryPaths() {
   const platform = process.platform;
