@@ -1,5 +1,5 @@
 // Search result card that collects download options before sending a job into the queue.
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Download, Video, Music, Eye, X } from "lucide-react";
 import "../styles/themes.css";
 
@@ -17,16 +17,9 @@ function DownloadCard({ data }) {
   const formatViews = (views) => { if (!views) return "0"; if (views >= 1_000_000_000) return `${(views / 1_000_000_000).toFixed(1)}B`; if (views >= 1_000_000) return `${(views / 1_000_000).toFixed(1)}M`; if (views >= 1_000) return `${(views / 1_000).toFixed(1)}K`; return views.toString(); };
   const formatDuration = (seconds) => { if (!seconds) return "0:00"; const mins = Math.floor(seconds / 60); const secs = Math.floor(seconds % 60); return `${mins}:${secs.toString().padStart(2, "0")}`; };
 
-
-  useEffect(() => {
-    console.log(stats)
-
-  }, [stats])
-
  
   const handleDownload = async () => {
 
-    console.log("querry recieved");
 
     const downPath = await window.api.getDefaultDownloadPath();
 
@@ -52,7 +45,6 @@ function DownloadCard({ data }) {
 
 
     await window.api.startDownload(vidObj);
-    console.log(vidObj); 
 
   }
 

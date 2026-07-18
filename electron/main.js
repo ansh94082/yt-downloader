@@ -2,44 +2,71 @@
 import { app, BrowserWindow, dialog, ipcMain, shell } from "electron";
 /* global process */
 import store from "./settingsStore.js";
-import path from "path";
-import fs from "fs";
 import { softSearch } from "./yt-dlp/softSearch.js";
 import { getBinaryPaths } from "./yt-dlp/binaries.js";
 import { verifyBinaries } from "./yt-dlp/verify.js";
 import downloadManager from "./utilities/downloadManager.js";
 
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import fs from "node:fs";
+
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+
+
 let mainWindow;
+
+const isDev = !app.isPackaged;
 
 const createWindow = () => {
   mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
-    title: "YT Downloader",
+    width: 1280,
+    height: 800,
+    minWidth: 1000,
+    minHeight: 650,
+    show: false,
+    title: app.getName(),
     backgroundColor: "#e2cba9",
-    webPreferences: {
-      preload: path.join(app.getAppPath(), "electron", "preload.js"),
-      contextIsolation: true,
-      nodeIntegration: true,
-    },
+    icon: app.isPackaged
+      ? path.join(process.resourcesPath, "resources", process.platform, "icon.png")
+      : path.join(process.cwd(), "build", "icon.png"),
+       webPreferences: {
+        preload: path.join(__dirname, "preload.cjs"),
+        contextIsolation: true,
+        nodeIntegration: false,
+      },
+  });
+
+  mainWindow.once("ready-to-show", () => {
+    mainWindow.show();
+    mainWindow.focus();
   });
 
   downloadManager.attachWindow(mainWindow);
   downloadManager.refreshPersistedJobs();
-  mainWindow.loadURL("http://localhost:6767");
+
+  if (isDev) {
+    mainWindow.loadURL("http://localhost:6767");
+  } else {
+    mainWindow.loadFile(path.join(app.getAppPath(), "dist", "index.html"));
+  }
 };
 
 app.whenReady().then(async () => {
   try {
     await verifyBinaries();
-    console.log("Binaries verified");
   } catch (err) {
     console.error("Binary verification failed:", err);
     app.quit();
     return;
   }
 
-  console.log(getBinaryPaths());
+  if (isDev) {
+    console.log(getBinaryPaths());
+  }
   createWindow();
 
   app.on("activate", () => {
@@ -55,31 +82,6 @@ app.on("window-all-closed", () => {
   }
 });
 
-const platformFiles = {
-  win32: {
-    ytdlp: "yt-dlp.exe",
-    ffmpeg: "ffmpeg.exe",
-    plocation: "../resources/win32",
-  },
-  linux: {
-    ytdlp: "yt-dlp",
-    ffmpeg: "ffmpeg",
-    plocation: "../resources/linux",
-  },
-  darwin: {
-    ytdlp: "yt-dlp_macos",
-    ffmpeg: "ffmpeg",
-    plocation: "../resources/darwin",
-  },
-};
-
-store.platform = process.platform;
-
-const files = platformFiles[process.platform];
-
-if (!files) {
-  throw new Error(`Unsupported platform: ${process.platform}`);
-}
 
 ipcMain.handle("settings:get", async () => {
   if (!store.get("downloadFolder")) {

@@ -1,18 +1,66 @@
 {
-  "name": "yt-downloader-proj",
+  "name": "yt-downloader",
+  "productName": "YT Downloader",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
-  "main": "./electron/main.js",
+  "main": "electron/main.js",
   "scripts": {
     "vite": "vite",
     "electron": "wait-on http://localhost:6767 && electron .",
     "start": "npm run dev",
     "dev": "concurrently \"npm run vite\" \"npm run electron\"",
-    "build": "vite build",
     "lint": "eslint .",
     "test": "vite && electron .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "build": "npm run build:renderer",
+    "build:renderer": "vite build",
+    "build:app": "electron-builder",
+    "dist": "npm run build && electron-builder"
+  },
+  "build": {
+    "appId": "com.ansh.ytdownloader",
+    "productName": "YT Downloader",
+    "compression": "maximum",
+    "publish": null,
+    "directories": {
+      "output": "release",
+      "buildResources": "build"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "package.json",
+      "!**/*.map"
+    ],
+    "extraResources": [
+      {
+        "from": "resources",
+        "to": "resources"
+      }
+    ],
+    "asar": true,
+    "linux": {
+      "target": "AppImage",
+      "category": "Utility",
+      "icon": "build/icon.png"
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "build/icon.ico"
+    },
+    "mac": {
+      "target": [
+        "dmg"
+      ],
+      "icon": "build/icon.icns"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.0",
@@ -34,6 +82,7 @@
     "@vitejs/plugin-react": "^6.0.1",
     "concurrently": "^9.2.1",
     "electron": "^41.7.1",
+    "electron-builder": "^26.15.3",
     "eslint": "^10.3.0",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.2",

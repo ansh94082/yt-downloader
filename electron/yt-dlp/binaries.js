@@ -6,8 +6,9 @@ import { app } from 'electron';
 export function getBinaryPaths() {
   const platform = process.platform;
 
-  const basePath = app.isPackaged ? process.resourcesPath : path.join(process.cwd(), 'resources');
-
+const basePath = app.isPackaged ? path.join(process.resourcesPath, "resources") : path.join(app.getAppPath(), "resources");
+  
+  
   return {
     ytdlp: path.join(
       basePath,

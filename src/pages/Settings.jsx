@@ -44,7 +44,6 @@ const Settings = () => {
     const foldata =
       await window.api.selectFolder();
 
-    console.log(foldata);
 
     if (foldata !== null) {
       handleChange(
@@ -97,12 +96,6 @@ const Settings = () => {
     }
 
   };
-
-
-  useEffect(() => {
-    console.log("Loaded settings:", settings); // test for ?(settings -> load)
-  }, [settings]);
-
 
 
   return (
