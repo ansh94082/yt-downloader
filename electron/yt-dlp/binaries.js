@@ -1,3 +1,4 @@
+// Resolves the local yt-dlp and ffmpeg binaries for the current platform.
 import path from 'node:path';
 import { app } from 'electron';
 /* global process */

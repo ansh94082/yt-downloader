@@ -1,3 +1,6 @@
+// Central queue manager that persists jobs, dispatches them, and keeps the UI synchronized.
+import fs from "fs";
+import path from "path";
 import jobStore from "../jobStore.js";
 import downloadQueue from "./queue.js";
 import startDownload from "../yt-dlp/startDownload.js";
@@ -14,14 +17,47 @@ class DownloadManager {
     this.mainWindow = mainWindow;
   }
 
+  normalizeJobs(jobs = []) {
+    return jobs.map((job) => {
+      const normalized = {
+        ...job,
+        status: job.status || "queued",
+        progress: job.progress ?? 0,
+        createdAt: job.createdAt ?? Date.now(),
+        startedAt: job.startedAt ?? null,
+        finishedAt: job.finishedAt ?? null,
+        speed: job.speed ?? null,
+        eta: job.eta ?? null,
+        error: job.error ?? null,
+      };
+
+      if (normalized.downloadPath && normalized.status === "finished") {
+        const folderExists = fs.existsSync(path.resolve(normalized.downloadPath));
+        if (!folderExists) {
+          normalized.status = "missing";
+          normalized.error = "Download not found.";
+        }
+      }
+
+      return normalized;
+    });
+  }
+
   getJobs() {
-    return jobStore.get("downloads") || [];
+    return this.normalizeJobs(jobStore.get("downloads") || []);
   }
 
   broadcastJobs() {
     if (this.mainWindow?.webContents) {
       this.mainWindow.webContents.send("downloads:updated", this.getJobs());
     }
+  }
+
+  refreshPersistedJobs() {
+    const jobs = this.getJobs();
+    jobStore.set("downloads", jobs);
+    this.broadcastJobs();
+    return jobs;
   }
 
   persistJob(item) {

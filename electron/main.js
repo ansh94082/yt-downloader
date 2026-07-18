@@ -1,3 +1,4 @@
+// Electron entry point that wires the IPC bridges, download manager, and window lifecycle.
 import { app, BrowserWindow, dialog, ipcMain, shell } from "electron";
 /* global process */
 import store from "./settingsStore.js";
@@ -24,6 +25,7 @@ const createWindow = () => {
   });
 
   downloadManager.attachWindow(mainWindow);
+  downloadManager.refreshPersistedJobs();
   mainWindow.loadURL("http://localhost:6767");
 };
 
@@ -104,13 +106,16 @@ ipcMain.handle("folder:select", async () => {
 });
 
 ipcMain.handle("downloads:path", () => {
-  const downloadPath = path.join(app.getPath("downloads"), "YT Downloader");
+  const configuredPath = store.get("downloadFolder");
+  const fallbackPath = path.join(app.getPath("downloads"), "YT Downloader");
+  const downloadPath = configuredPath || fallbackPath;
+  const resolvedPath = path.isAbsolute(downloadPath) ? downloadPath : path.resolve(downloadPath);
 
-  if (!fs.existsSync(downloadPath)) {
-    fs.mkdirSync(downloadPath, { recursive: true });
+  if (!fs.existsSync(resolvedPath)) {
+    fs.mkdirSync(resolvedPath, { recursive: true });
   }
 
-  return downloadPath;
+  return resolvedPath;
 });
 
 ipcMain.handle("analyze:input", async (_, url) => {
@@ -159,8 +164,30 @@ ipcMain.handle("download:retry", async (_, id, stats) => {
   return true;
 });
 
-ipcMain.handle("folder:open", async (_, folderPath) => {
-  if (!folderPath) return false;
-  await shell.openPath(folderPath);
-  return true;
+ipcMain.handle("folder:open", async (_, jobId, folderPath) => {
+  const fallbackPath = store.get("downloadFolder") || path.join(app.getPath("downloads"), "YT Downloader");
+  const rawPath = folderPath || fallbackPath;
+  const normalizedPath = path.isAbsolute(rawPath) ? rawPath : path.resolve(rawPath);
+
+  let targetPath = normalizedPath;
+
+  if (fs.existsSync(normalizedPath)) {
+    const stats = fs.statSync(normalizedPath);
+    if (!stats.isDirectory()) {
+      targetPath = path.dirname(normalizedPath);
+    }
+  }
+
+  try {
+    fs.mkdirSync(targetPath, { recursive: true });
+    await shell.openPath(targetPath);
+    return { ok: true, missing: false, path: targetPath };
+  } catch (error) {
+    console.error("Folder open failed:", error);
+    downloadManager.updateJob(jobId, {
+      status: "missing",
+      error: "Could not open the download folder.",
+    });
+    return { ok: false, missing: true, path: targetPath };
+  }
 });

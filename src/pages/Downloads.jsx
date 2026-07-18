@@ -1,3 +1,4 @@
+// Downloads view that renders the persisted queue and exposes queue controls.
 import { useMemo, useState, useEffect } from "react";
 import { Download, Clock3, CheckCircle2, XCircle, Activity } from "lucide-react";
 import DownloadQueueCard from "../components/DownloadQueueCard";
@@ -152,7 +153,7 @@ function Downloads() {
             onResume={(id) => window.api.resumeDownload(id)}
             onCancel={(id) => window.api.cancelDownload(id)}
             onRetry={(id, stats) => window.api.retryDownload(id, stats)}
-            onOpenFolder={(path) => window.api.openFolder?.(path)}
+            onOpenFolder={(jobId, folderPath) => window.api.openFolder?.(jobId, folderPath)}
           />
         ))}
       </div>

@@ -1,3 +1,4 @@
+// Settings screen for application preferences and download destination selection.
 import { useEffect, useState } from "react";
 import "../styles/Settings.css";
 

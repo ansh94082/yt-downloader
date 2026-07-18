@@ -1,3 +1,4 @@
+// Persistent settings store used by the app preferences screen.
 import Store from "electron-store";
 
 const store = new Store({

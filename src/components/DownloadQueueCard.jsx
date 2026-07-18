@@ -1,3 +1,4 @@
+// Visual queue card for a single download job with status, progress, and action buttons.
 import { useMemo, useState } from "react";
 import {
   Pause,
@@ -65,6 +66,7 @@ function DownloadQueueCard({
   const isFinished = job.status === "finished";
   const isFailed = job.status === "failed";
   const isCanceled = job.status === "canceled";
+  const isMissing = job.status === "missing";
   const progress = Math.max(0, Math.min(100, job.progress || 0));
 
   const status = useMemo(() => {
@@ -81,6 +83,8 @@ function DownloadQueueCard({
         return { label: "Failed", icon: AlertCircle, className: "failed" };
       case "canceled":
         return { label: "Canceled", icon: X, className: "failed" };
+      case "missing":
+        return { label: "Missing", icon: AlertCircle, className: "failed" };
       default:
         return { label: "Unknown", icon: Clock3, className: "queued" };
     }
@@ -108,7 +112,7 @@ function DownloadQueueCard({
   }
 
   function handleOpenFolder() {
-    onOpenFolder?.(job.downloadPath);
+    onOpenFolder?.(job.id, job.downloadPath || job.folderPath || "");
   }
 
   return (
@@ -162,8 +166,8 @@ function DownloadQueueCard({
             </div>
           )}
 
-          {(isFailed || isCanceled) && (
-            <div className="download-error">{job.error || (isCanceled ? "Download was stopped." : "Download failed.")}</div>
+          {(isFailed || isCanceled || isMissing) && (
+            <div className="download-error">{job.error || (isCanceled ? "Download was stopped." : isMissing ? "The download folder could not be found." : "Download failed.")}</div>
           )}
 
           <div className="queue-actions">
@@ -200,10 +204,10 @@ function DownloadQueueCard({
               </button>
             )}
 
-            {isFinished && (
+            {(isFinished || isMissing) && (
               <button className="primary-button" onClick={handleOpenFolder}>
                 <FolderOpen size={16} />
-                Open Folder
+                {isMissing ? "Try Again" : "Open Folder"}
               </button>
             )}
 

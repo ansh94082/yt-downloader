@@ -1,3 +1,4 @@
+// Search result card that collects download options before sending a job into the queue.
 import { useEffect, useState } from "react";
 import { Download, Video, Music, Eye, X } from "lucide-react";
 import "../styles/themes.css";
@@ -10,7 +11,7 @@ function DownloadCard({ data }) {
   const [stats, setStats] = useState({ type: "video", quality: "highest", format: "mp4" });
   const [videodef, setVideodef] = useState(false);
   const [audiodef, setAudiodef] = useState(false);
-  const [audioformat, setAudioformat] = useState(false); // this serves a simple but important purpose , when user changes from video to audio , its important to select the format , in case of not doing this we may pick quality in audio , but video format  
+  const [audioformat, setAudioformat] = useState(false); // this serves a simple iportant purpose , when user changes from video to audio , its important to select the format , in case of not doing this we may pick quality in audio , but video format  
   const [videoformat, setVideoformat] = useState(false); // similiar to audio
 
   const formatViews = (views) => { if (!views) return "0"; if (views >= 1_000_000_000) return `${(views / 1_000_000_000).toFixed(1)}B`; if (views >= 1_000_000) return `${(views / 1_000_000).toFixed(1)}M`; if (views >= 1_000) return `${(views / 1_000).toFixed(1)}K`; return views.toString(); };

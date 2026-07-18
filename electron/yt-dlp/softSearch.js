@@ -1,3 +1,4 @@
+// Searches YouTube with yt-dlp and normalizes the result shape for the UI.
 import { spawn } from 'node:child_process';
 import { getBinaryPaths } from './binaries.js';
 import { areBinariesHealthy } from './verify.js';

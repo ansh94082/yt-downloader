@@ -1,4 +1,6 @@
-import { useState , useEffect } from "react";
+// Home screen for entering a URL and reviewing the search results before queueing downloads.
+import { useState, useEffect } from "react";
+import { LoaderCircle } from "lucide-react";
 import DownloadCard from "../components/DownloadCard";
 import "../styles/Home.css";
 import toast from "react-hot-toast";
@@ -6,8 +8,8 @@ import toast from "react-hot-toast";
 function Home() {
 
   const [url, setUrl] = useState("");
-
   const [downloads, setDownloads] = useState([]);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
 
 
   useEffect(() => {
@@ -27,22 +29,28 @@ function Home() {
 
 
   const handleAnalyze = async () => {
-
     if (!url.trim()) {
       return;
     }
 
-    const videoData = await window.api.analyzeVideo(url);
-    console.log(videoData);
+    setIsAnalyzing(true);
 
-    if (!videoData) {
-      console.error("NO DATA RETURNED");
-      return;
+    try {
+      const videoData = await window.api.analyzeVideo(url);
+
+      if (!videoData) {
+        toast.error("No results were returned for that URL.");
+        return;
+      }
+
+      setDownloads([videoData]);
+      setUrl("");
+    } catch (error) {
+      console.error(error);
+      toast.error("The analysis could not be completed.");
+    } finally {
+      setIsAnalyzing(false);
     }
-
-    setDownloads([videoData]);
-
-    setUrl("");
   };
 
   const handleKeyDown = (e) => {
@@ -80,8 +88,16 @@ function Home() {
         <button
           className="analyze-btn primary-button"
           onClick={handleAnalyze}
+          disabled={isAnalyzing}
         >
-          Enter
+          {isAnalyzing ? (
+            <span className="analyze-loading">
+              <LoaderCircle size={18} className="spin" />
+              Analyzing
+            </span>
+          ) : (
+            "Enter"
+          )}
         </button>
 
       </div>

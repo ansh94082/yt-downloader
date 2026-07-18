@@ -1,3 +1,4 @@
+// Renderer-side bridge that exposes the Electron IPC API to the React UI.
 import { contextBridge, ipcRenderer } from "electron";
 
 contextBridge.exposeInMainWorld(
@@ -47,6 +48,8 @@ contextBridge.exposeInMainWorld(
     resumeDownload: async (id) => ipcRenderer.invoke("download:resume", id),
 
     cancelDownload: async (id) => ipcRenderer.invoke("download:cancel", id),
+
+    openFolder: async (jobId, folderPath) => ipcRenderer.invoke("folder:open", jobId, folderPath),
 
     retryDownload: async (id, stats) => ipcRenderer.invoke("download:retry", id, stats),
   }

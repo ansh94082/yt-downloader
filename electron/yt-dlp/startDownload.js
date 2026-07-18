@@ -1,3 +1,4 @@
+// Launches the yt-dlp process for either video or audio downloads and reports progress back to the renderer.
 import { spawn } from "child_process";
 import downloadManager from "../utilities/downloadManager.js";
 import { getBinaryPaths } from "./binaries.js";
