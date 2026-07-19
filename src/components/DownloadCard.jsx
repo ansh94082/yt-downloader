@@ -1,14 +1,20 @@
 // Search result card that collects download options before sending a job into the queue.
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Download, Video, Music, Eye, X } from "lucide-react";
 import "../styles/themes.css";
 
 
 
 function DownloadCard({ data }) {
+  const getDefaultStatsForTab = (nextTab) => ({
+    type: nextTab,
+    quality: nextTab === "audio" ? "Highest" : "highest",
+    format: nextTab === "audio" ? "mp3" : "mp4",
+  });
+
   const [open, setOpen] = useState(false);
   const [tab, setTab] = useState("video");
-  const [stats, setStats] = useState({ type: "video", quality: "highest", format: "mp4" });
+  const [stats, setStats] = useState(getDefaultStatsForTab("video"));
   const [videodef, setVideodef] = useState(false);
   const [audiodef, setAudiodef] = useState(false);
   const [audioformat, setAudioformat] = useState(false); // this serves a simple iportant purpose , when user changes from video to audio , its important to select the format , in case of not doing this we may pick quality in audio , but video format  
@@ -17,26 +23,32 @@ function DownloadCard({ data }) {
   const formatViews = (views) => { if (!views) return "0"; if (views >= 1_000_000_000) return `${(views / 1_000_000_000).toFixed(1)}B`; if (views >= 1_000_000) return `${(views / 1_000_000).toFixed(1)}M`; if (views >= 1_000) return `${(views / 1_000).toFixed(1)}K`; return views.toString(); };
   const formatDuration = (seconds) => { if (!seconds) return "0:00"; const mins = Math.floor(seconds / 60); const secs = Math.floor(seconds % 60); return `${mins}:${secs.toString().padStart(2, "0")}`; };
 
+  const switchTab = (nextTab) => {
+    setTab(nextTab);
+    setStats(getDefaultStatsForTab(nextTab));
+    setVideodef(false);
+    setAudiodef(false);
+    setAudioformat(false);
+    setVideoformat(false);
+  };
 
-  useEffect(() => {
-    console.log(stats)
-
-  }, [stats])
-
- 
   const handleDownload = async () => {
 
-    console.log("querry recieved");
-
     const downPath = await window.api.getDefaultDownloadPath();
+
+    const resolvedStats = {
+      type: tab,
+      quality: stats.quality || (tab === "audio" ? "Highest" : "highest"),
+      format: stats.format || (tab === "audio" ? "mp3" : "mp4"),
+    };
 
     let vidObj = {
       id: data.id,
       title: data.title,
       thumbnail: data.thumbnail,
-      type: stats.type,
-      format: stats.format,
-      quality: stats.quality,
+      type: resolvedStats.type,
+      format: resolvedStats.format,
+      quality: resolvedStats.quality,
       downloadPath: downPath,
       status: "queued",
       createdAt: Date.now(),
@@ -212,25 +224,8 @@ function DownloadCard({ data }) {
 
           <div className="mb-4 flex gap-2">
             <button
-              onClick={() => setTab("video")}
-              className="
-                flex-1
-                rounded-xl
-                py-2
-                text-sm
-                font-medium
-                transition
-              "
-              style={
-                tab === "video"
-                  ? {
-                    background: "var(--accent)",
-                    color: "var(--button-text, white)",
-                  }
-                  : {
-                    border: "1px solid var(--border)",
-                  }
-              }
+              onClick={() => switchTab("video")}
+              className={`download-tab-button ${tab === "video" ? "active" : ""}`}
             >
               <div className="flex items-center justify-center gap-2">
                 <Video size={15} />
@@ -239,25 +234,8 @@ function DownloadCard({ data }) {
             </button>
 
             <button
-              onClick={() => setTab("audio")}
-              className="
-                flex-1
-                rounded-xl
-                py-2
-                text-sm
-                font-medium
-                transition
-              "
-              style={
-                tab === "audio"
-                  ? {
-                    background: "var(--accent)",
-                    color: "var(--button-text, white)",
-                  }
-                  : {
-                    border: "1px solid var(--border)",
-                  }
-              }
+              onClick={() => switchTab("audio")}
+              className={`download-tab-button ${tab === "audio" ? "active" : ""}`}
             >
               <div className="flex items-center justify-center gap-2">
                 <Music size={15} />
@@ -269,15 +247,12 @@ function DownloadCard({ data }) {
           {tab === "video" && (
             <div className="space-y-3">
               <div className="flex gap-7">
-                {!videodef && (<button className=" flex-1 rounded-xl py-2 text-sm p-3 font-medium transition "
-                  style={{ background: "var(--accent)", color: "var(--button-text, white)", }}
+                {!videodef && (<button className="download-choice-btn active flex-1 rounded-xl py-2 text-sm p-3 font-medium transition "
                   onClick={() => { setVideodef(true); setVideoformat(false) }}>
                   default
 
                 </button>)}
-                {videodef && (<button className=" flex-1 rounded-xl py-2 text-sm p-3 font-medium transition "
-                  style={{ border: "1px solid var(--border)" }}
-
+                {videodef && (<button className="download-choice-btn flex-1 rounded-xl py-2 text-sm p-3 font-medium transition "
                   onClick={() => setVideodef(false)}>
                   cancel default
 
@@ -315,7 +290,7 @@ function DownloadCard({ data }) {
                 </select>
 
                 {videoformat && (<select
-                  className="
+                  className="download-select
                   w-full
                   rounded-xl
                   px-3
@@ -345,7 +320,7 @@ function DownloadCard({ data }) {
               </div>)}
 
               <button
-                className="
+                className="download-action-btn
                   w-full
                   rounded-xl
                   py-3
@@ -353,10 +328,6 @@ function DownloadCard({ data }) {
                   transition
                   hover:brightness-110
                 "
-                style={{
-                  background: "var(--accent)",
-                  color: "var(--button-text, white)",
-                }}
                 onClick={handleDownload}
               >
                 Download Video
@@ -367,15 +338,12 @@ function DownloadCard({ data }) {
           {tab === "audio" && (
             <div className="space-y-3">
               <div className="flex gap-7">
-                {!audiodef && (<button className=" flex-1 rounded-xl py-2 text-sm p-3 font-medium transition "
-                  style={{ background: "var(--accent)", color: "var(--button-text, white)", }}
+                {!audiodef && (<button className="download-choice-btn active flex-1 rounded-xl py-2 text-sm p-3 font-medium transition "
                   onClick={() => setAudiodef(true)}>
                   default
 
                 </button>)}
-                {audiodef && (<button className=" flex-1 rounded-xl py-2 text-sm p-3 font-medium transition "
-                  style={{ border: "1px solid var(--border)" }}
-
+                {audiodef && (<button className="download-choice-btn flex-1 rounded-xl py-2 text-sm p-3 font-medium transition "
                   onClick={() => setAudiodef(false)}>
                   cancel default
 
@@ -383,7 +351,7 @@ function DownloadCard({ data }) {
               </div>
               {!audiodef && (<div className="flex gap-2">
                 <select
-                  className="
+                  className="download-select
                   w-full
                   rounded-xl
                   px-3
@@ -409,7 +377,7 @@ function DownloadCard({ data }) {
                 </select>
 
                 {audioformat && (<select
-                  className="
+                  className="download-select
                   w-full
                   rounded-xl
                   px-3
@@ -434,7 +402,7 @@ function DownloadCard({ data }) {
               </div>)}
 
               <button
-                className="
+                className="download-action-btn
                   w-full
                   rounded-xl
                   py-3
@@ -443,10 +411,6 @@ function DownloadCard({ data }) {
                   hover:brightness-110
                 "
                 onClick={handleDownload}
-                style={{
-                  background: "var(--accent)",
-                  color: "var(--button-text, white)",
-                }}
               >
                 Download Audio
               </button>

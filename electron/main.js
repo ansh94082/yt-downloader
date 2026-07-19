@@ -164,30 +164,56 @@ ipcMain.handle("download:retry", async (_, id, stats) => {
   return true;
 });
 
+
+
 ipcMain.handle("folder:open", async (_, jobId, folderPath) => {
-  const fallbackPath = store.get("downloadFolder") || path.join(app.getPath("downloads"), "YT Downloader");
-  const rawPath = folderPath || fallbackPath;
-  const normalizedPath = path.isAbsolute(rawPath) ? rawPath : path.resolve(rawPath);
-
-  let targetPath = normalizedPath;
-
-  if (fs.existsSync(normalizedPath)) {
-    const stats = fs.statSync(normalizedPath);
-    if (!stats.isDirectory()) {
-      targetPath = path.dirname(normalizedPath);
-    }
-  }
-
   try {
-    fs.mkdirSync(targetPath, { recursive: true });
-    await shell.openPath(targetPath);
-    return { ok: true, missing: false, path: targetPath };
-  } catch (error) {
-    console.error("Folder open failed:", error);
+
+    if (!fs.existsSync(folderPath)) {
+      console.log("error")
+      return {
+        ok: false,
+        missing: true,
+        path: folderPath,
+      };
+    }
+
+    const error = await shell.openPath(folderPath);
+
+    if (error) {
+      console.error("Failed to open folder:", error);
+
+      downloadManager.updateJob(jobId, {
+        status: "missing",
+        error: "Could not open the download folder.",
+      });
+
+      return {
+        ok: false,
+        missing: true,
+        path: folderPath,
+        error,
+      };
+    }
+
+    return {
+      ok: true,
+      missing: false,
+      path: folderPath,
+    };
+  } catch (err) {
+    console.error(err);
+
     downloadManager.updateJob(jobId, {
       status: "missing",
       error: "Could not open the download folder.",
     });
-    return { ok: false, missing: true, path: targetPath };
+
+    return {
+      ok: false,
+      missing: true,
+      path: folderPath,
+      error: err.message,
+    };
   }
 });

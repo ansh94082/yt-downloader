@@ -112,7 +112,7 @@ function DownloadQueueCard({
   }
 
   function handleOpenFolder() {
-    onOpenFolder?.(job.id, job.downloadPath || job.folderPath || "");
+    onOpenFolder?.(job.id, job.downloadPath || "");
   }
 
   return (

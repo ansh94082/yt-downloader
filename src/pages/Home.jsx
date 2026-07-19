@@ -34,6 +34,7 @@ function Home() {
     }
 
     setIsAnalyzing(true);
+    setDownloads([]);
 
     try {
       const videoData = await window.api.analyzeVideo(url);
@@ -101,6 +102,13 @@ function Home() {
         </button>
 
       </div>
+
+      {isAnalyzing && (
+        <div className="search-status" role="status" aria-live="polite">
+          <LoaderCircle size={16} className="spin" />
+          <span>Searching for your video...</span>
+        </div>
+      )}
 
       <div className="downloads-container">
 
