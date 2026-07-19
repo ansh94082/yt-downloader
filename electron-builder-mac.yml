@@ -1,0 +1,28 @@
+appId: com.ansh.ytdownloader
+productName: YT Downloader
+
+compression: maximum
+publish: null
+
+directories:
+  output: release
+  buildResources: build
+
+files:
+  - dist/**/*
+  - electron/**/*
+  - package.json
+  - "!**/*.map"
+
+extraResources:
+  - from: resources
+    to: resources
+    filter:
+      - darwin/**
+
+asar: true
+
+mac:
+  target:
+    - dmg
+  icon: build/icon.icns
