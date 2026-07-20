@@ -1,5 +1,6 @@
 // Electron entry point that wires the IPC bridges, download manager, and window lifecycle.
 import { app, BrowserWindow, dialog, ipcMain, shell } from "electron";
+import { spawn } from "node:child_process";
 /* global process */
 import store from "./settingsStore.js";
 import path from "path";
@@ -10,6 +11,38 @@ import { verifyBinaries } from "./yt-dlp/verify.js";
 import downloadManager from "./utilities/downloadManager.js";
 
 let mainWindow;
+
+function openFolder(folderPath) {
+  if (process.platform !== "linux") {
+    return shell.openPath(folderPath);
+  }
+
+  // Some Linux setups register a terminal (for example kitty-open) as the
+  // directory handler. Use a real file manager when one is installed.
+  const fileManagers = ["nautilus", "dolphin", "thunar", "nemo", "pcmanfm"];
+
+  return new Promise((resolve) => {
+    const tryNext = (index) => {
+      if (index === fileManagers.length) {
+        shell.openPath(folderPath).then(resolve);
+        return;
+      }
+
+      const child = spawn(fileManagers[index], [folderPath], {
+        detached: true,
+        stdio: "ignore",
+      });
+
+      child.once("spawn", () => {
+        child.unref();
+        resolve("");
+      });
+      child.once("error", () => tryNext(index + 1));
+    };
+
+    tryNext(0);
+  });
+}
 
 const createWindow = () => {
   mainWindow = new BrowserWindow({
@@ -168,17 +201,18 @@ ipcMain.handle("download:retry", async (_, id, stats) => {
 
 ipcMain.handle("folder:open", async (_, jobId, folderPath) => {
   try {
+    const configuredPath = store.get("downloadFolder");
+    const fallbackPath = path.join(app.getPath("downloads"), "YT Downloader");
+    const requestedPath = folderPath || configuredPath || fallbackPath;
+    const resolvedPath = path.resolve(requestedPath);
 
-    if (!fs.existsSync(folderPath)) {
-      console.log("error")
-      return {
-        ok: false,
-        missing: true,
-        path: folderPath,
-      };
+    // A folder may have been removed after the job finished. Recreate the
+    // configured download folder so "Open Folder" remains useful.
+    if (!fs.existsSync(resolvedPath)) {
+      fs.mkdirSync(resolvedPath, { recursive: true });
     }
 
-    const error = await shell.openPath(folderPath);
+    const error = await openFolder(resolvedPath);
 
     if (error) {
       console.error("Failed to open folder:", error);
@@ -190,8 +224,8 @@ ipcMain.handle("folder:open", async (_, jobId, folderPath) => {
 
       return {
         ok: false,
-        missing: true,
-        path: folderPath,
+        missing: false,
+        path: resolvedPath,
         error,
       };
     }
@@ -199,7 +233,7 @@ ipcMain.handle("folder:open", async (_, jobId, folderPath) => {
     return {
       ok: true,
       missing: false,
-      path: folderPath,
+      path: resolvedPath,
     };
   } catch (err) {
     console.error(err);
@@ -212,7 +246,7 @@ ipcMain.handle("folder:open", async (_, jobId, folderPath) => {
     return {
       ok: false,
       missing: true,
-      path: folderPath,
+      path: folderPath || null,
       error: err.message,
     };
   }

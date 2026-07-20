@@ -1,5 +1,8 @@
 // Launches the yt-dlp process for either video or audio downloads and reports progress back to the renderer.
 import { spawn } from "child_process";
+import fs from "node:fs";
+import path from "node:path";
+import process from "node:process";
 import downloadManager from "../utilities/downloadManager.js";
 import { getBinaryPaths } from "./binaries.js";
 import { verifyBinaries } from "./verify.js";
@@ -39,6 +42,15 @@ function parseProgressPatch(text) {
   return Object.keys(patch).length > 0 ? patch : null;
 }
 
+function getAudioQuality(quality) {
+  const value = String(quality || "highest").trim().toLowerCase();
+
+  if (value === "highest") return "0";
+
+  const bitrate = value.match(/\d+/)?.[0];
+  return bitrate ? `${bitrate}K` : "0";
+}
+
 const startDownload = async (item) => {
   try {
     await verifyBinaries();
@@ -52,30 +64,35 @@ const startDownload = async (item) => {
   const ffmpegPath = bPath.ffmpeg;
   const { id, quality, format, downloadPath, type } = item;
   const url = `https://www.youtube.com/watch?v=${id}`;
+  const resolvedDownloadPath = path.resolve(downloadPath);
+  fs.mkdirSync(resolvedDownloadPath, { recursive: true });
+  const outputPath = path.join(resolvedDownloadPath, "%(title)s.%(ext)s");
 
   const args = [
     "--ffmpeg-location",
     ffmpegPath,
     "-o",
-    `${downloadPath}/%(title)s.%(ext)s`,
+    outputPath,
     "--newline",
+    "--no-playlist",
+    ...(process.platform === "win32" ? ["--windows-filenames"] : []),
     url,
   ];
 
   if (type === "audio") {
-    const audioQuality = quality === "highest" ? "0" : quality;
-    args.splice(2, 0, "-x", "--audio-format", format, "--audio-quality", audioQuality);
+    args.splice(2, 0, "-x", "--audio-format", String(format || "mp3").toLowerCase(), "--audio-quality", getAudioQuality(quality));
   } else {
     const videoQuality = quality === "highest"
       ? "bv*+ba/b"
-      : `bv*[height<=${quality.replace("p", "")}] + ba/b`;
+      : `bv*[height<=${String(quality).replace(/[^\d]/g, "")}]+ba/b`;
 
-    args.splice(2, 0, "-f", videoQuality, "--merge-output-format", format);
+    args.splice(2, 0, "-f", videoQuality, "--merge-output-format", String(format || "mp4").toLowerCase());
   }
 
   return new Promise((resolve, reject) => {
-    const job = spawn(ytdlpPath, args);
+    const job = spawn(ytdlpPath, args, { windowsHide: true });
     downloadManager.activeDownloads.set(item.id, job);
+    let stderr = "";
 
     job.on("spawn", () => {
       console.log("Process started");
@@ -83,6 +100,7 @@ const startDownload = async (item) => {
 
     job.stderr.on("data", (data) => {
       const text = data.toString();
+      stderr += text;
       const patch = parseProgressPatch(text);
       if (patch) {
         downloadManager.updateJob(item.id, patch);
@@ -95,7 +113,7 @@ const startDownload = async (item) => {
       if (code === 0) {
         resolve();
       } else {
-        reject(new Error(`yt-dlp exited with ${code}`));
+        reject(new Error(stderr.trim() || `yt-dlp exited with ${code}`));
       }
     });
 
