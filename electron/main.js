@@ -1,5 +1,6 @@
 // Electron entry point that wires the IPC bridges, download manager, and window lifecycle.
-import { app, BrowserWindow, dialog, ipcMain, shell } from "electron";
+import { app, BrowserWindow, dialog, ipcMain, Menu, shell } from "electron";
+import { spawn } from "node:child_process";
 /* global process */
 import store from "./settingsStore.js";
 import { softSearch } from "./yt-dlp/softSearch.js";
@@ -21,6 +22,36 @@ let mainWindow;
 
 const isDev = !app.isPackaged;
 
+function openFolder(folderPath) {
+  if (process.platform !== "linux") {
+    return shell.openPath(folderPath);
+  }
+
+  const fileManagers = ["nautilus", "dolphin", "thunar", "nemo", "pcmanfm"];
+
+  return new Promise((resolve) => {
+    const tryNext = (index) => {
+      if (index === fileManagers.length) {
+        shell.openPath(folderPath).then(resolve);
+        return;
+      }
+
+      const child = spawn(fileManagers[index], [folderPath], {
+        detached: true,
+        stdio: "ignore",
+      });
+
+      child.once("spawn", () => {
+        child.unref();
+        resolve("");
+      });
+      child.once("error", () => tryNext(index + 1));
+    };
+
+    tryNext(0);
+  });
+}
+
 const createWindow = () => {
   mainWindow = new BrowserWindow({
     width: 1280,
@@ -33,11 +64,11 @@ const createWindow = () => {
     icon: app.isPackaged
       ? path.join(process.resourcesPath, "resources", process.platform, "icon.png")
       : path.join(process.cwd(), "build", "icon.png"),
-       webPreferences: {
-        preload: path.join(__dirname, "preload.cjs"),
-        contextIsolation: true,
-        nodeIntegration: false,
-      },
+    webPreferences: {
+      preload: path.join(__dirname, "preload.cjs"),
+      contextIsolation: true,
+      nodeIntegration: false,
+    },
   });
 
   mainWindow.once("ready-to-show", () => {
@@ -57,6 +88,7 @@ const createWindow = () => {
 
 app.whenReady().then(async () => {
   try {
+    Menu.setApplicationMenu(null);
     await verifyBinaries();
   } catch (err) {
     console.error("Binary verification failed:", err);
@@ -182,7 +214,10 @@ ipcMain.handle("folder:open", async (_, jobId, folderPath) => {
 
   try {
     fs.mkdirSync(targetPath, { recursive: true });
-    await shell.openPath(targetPath);
+    const error = await openFolder(targetPath);
+    if (error) {
+      throw new Error(error);
+    }
     return { ok: true, missing: false, path: targetPath };
   } catch (error) {
     console.error("Folder open failed:", error);

@@ -105,3 +105,8 @@ code {
   padding: 4px 8px;
   background: var(--code-bg);
 }
+
+a {
+  -webkit-user-drag: none;
+  user-select: none;
+}
